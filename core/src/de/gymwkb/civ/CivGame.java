@@ -20,5 +20,6 @@ public class CivGame extends Game {
     @Override
     public void dispose() {
         batch.dispose();
+        Registry.disposeInstance();
     }
 }
