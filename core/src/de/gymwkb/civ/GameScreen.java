@@ -5,6 +5,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
+import de.gymwkb.civ.map.HexMap;
+import de.gymwkb.civ.map.HexMapRenderer;
+
 public class GameScreen implements Screen {
     private final CivGame game;
     private OrthographicCamera camera;

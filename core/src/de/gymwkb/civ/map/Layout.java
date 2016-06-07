@@ -1,9 +1,7 @@
-package de.gymwkb.civ.hexutils;
+package de.gymwkb.civ.map;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-
-import de.gymwkb.civ.Hex;
 
 public class Layout {
     private static final float SQRT3 = (float) Math.sqrt(3.0);

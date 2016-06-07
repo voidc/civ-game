@@ -1,4 +1,4 @@
-package de.gymwkb.civ;
+package de.gymwkb.civ.map;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -7,9 +7,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 
-import de.gymwkb.civ.HexMap.Cell;
-import de.gymwkb.civ.HexMap.Cell.Layer;
-import de.gymwkb.civ.hexutils.Layout;
+import de.gymwkb.civ.map.HexMap.Cell;
+import de.gymwkb.civ.map.HexMap.Cell.Layer;
 
 public class HexMapRenderer {
     private HexMap map;

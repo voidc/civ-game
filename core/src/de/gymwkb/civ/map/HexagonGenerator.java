@@ -1,6 +1,6 @@
-package de.gymwkb.civ;
+package de.gymwkb.civ.map;
 
-import de.gymwkb.civ.HexMap.Cell;
+import de.gymwkb.civ.map.HexMap.Cell;
 
 public class HexagonGenerator {
     private static final int SIZE = 100;

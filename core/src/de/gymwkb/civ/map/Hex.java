@@ -1,4 +1,4 @@
-package de.gymwkb.civ;
+package de.gymwkb.civ.map;
 
 public class Hex {
     public final int q;

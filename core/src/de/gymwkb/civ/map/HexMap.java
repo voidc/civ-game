@@ -1,4 +1,4 @@
-package de.gymwkb.civ;
+package de.gymwkb.civ.map;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.OrderedMap;
