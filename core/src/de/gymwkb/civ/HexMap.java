@@ -35,6 +35,10 @@ public class HexMap {
         public Layer getLayer(LayerType layer) {
             return layers[layer.ordinal()];
         }
+        
+        public Layer[] getLayers() {
+            return layers;
+        }
 
         public interface Layer {
             TextureRegion getTexture();
