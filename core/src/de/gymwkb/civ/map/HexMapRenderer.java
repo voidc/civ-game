@@ -23,15 +23,17 @@ public class HexMapRenderer {
         this.map = map;
         this.batch = batch;
         shapeRenderer = new ShapeRenderer();
-        layout = new Layout(Layout.FLAT, new Vector2(1f, 1f), Vector2.Zero);
+        layout = new Layout(Layout.FLAT, new Vector2(100f, 100f), Vector2.Zero);
     }
 
     public void setView(OrthographicCamera camera) {
-        projMatrix = camera.projection;
+        //TODO: set view bounds to limit rendering
+        projMatrix = camera.combined;
     }
 
     public void render() {
         shapeRenderer.begin(ShapeType.Line);
+        shapeRenderer.setProjectionMatrix(projMatrix);
         shapeRenderer.setColor(1, 1, 0, 1);
         batch.begin();
         batch.setProjectionMatrix(projMatrix);
@@ -56,6 +58,6 @@ public class HexMapRenderer {
     }
     
     private void drawLayer(Cell.Layer layer) {
-        
+        //TODO: draw textures
     }
 }
