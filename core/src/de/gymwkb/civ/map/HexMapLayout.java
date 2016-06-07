@@ -3,7 +3,7 @@ package de.gymwkb.civ.map;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
-public class Layout {
+public class HexMapLayout {
     private static final float SQRT3 = (float) Math.sqrt(3.0);
     public static final Orientation POINTY = new Orientation(SQRT3, SQRT3 / 2.0f, 0.0f, 3.0f / 2.0f, SQRT3 / 3.0f,
             -1.0f / 3.0f, 0.0f, 2.0f / 3.0f, 0.5f);
@@ -14,7 +14,7 @@ public class Layout {
     private Vector2 size;
     private Vector2 origin;
 
-    public Layout(Orientation orientation, Vector2 size, Vector2 origin) {
+    public HexMapLayout(Orientation orientation, Vector2 size, Vector2 origin) {
         this.orientation = orientation;
         this.size = size;
         this.origin = origin;
@@ -63,6 +63,13 @@ public class Layout {
             vertices[i] = new Vector2(center.x + offset.x, center.y + offset.y);
         }
         return vertices;
+    }
+    
+    public void getVertices(Hex h, Vector2[] buffer) {
+        Vector2 center = hexToCartesian(h);
+        for (int i = 0; i < 6; i++) {
+            buffer[i].set(center.add(vertexOffset(i)));
+        }
     }
 
     private static class Orientation {
