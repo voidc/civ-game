@@ -20,13 +20,13 @@ public class Layout {
         this.origin = origin;
     }
 
-    public Vector2 hexToPixel(Hex h) {
+    public Vector2 hexToCartesian(Hex h) {
         float x = (orientation.f0 * h.q + orientation.f1 * h.r) * size.x;
         float y = (orientation.f2 * h.q + orientation.f3 * h.r) * size.y;
         return new Vector2(x + origin.x, y + origin.y);
     }
 
-    public Hex pixelToHex(Vector2 p) {
+    public Hex cartesianToHex(Vector2 p) {
         Vector2 pt = new Vector2((p.x - origin.x) / size.x, (p.y - origin.y) / size.y);
         float q = orientation.b0 * pt.x + orientation.b1 * pt.y;
         float r = orientation.b2 * pt.x + orientation.b3 * pt.y;
@@ -57,7 +57,7 @@ public class Layout {
 
     public Vector2[] getVertices(Hex h) {
         Vector2[] vertices = new Vector2[6];
-        Vector2 center = hexToPixel(h);
+        Vector2 center = hexToCartesian(h);
         for (int i = 0; i < 6; i++) {
             Vector2 offset = vertexOffset(i);
             vertices[i] = new Vector2(center.x + offset.x, center.y + offset.y);
