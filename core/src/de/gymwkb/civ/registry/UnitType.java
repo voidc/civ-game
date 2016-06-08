@@ -1,4 +1,4 @@
-package de.gymwkb.civ;
+package de.gymwkb.civ.registry;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
