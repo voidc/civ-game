@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -15,17 +14,22 @@ public class HexMapRenderer {
     private HexMap map;
     private Batch batch;
     private ShapeRenderer shapeRenderer;
-    private Layout layout;
+    private HexMapLayout layout;
     private Rectangle viewBounds;
     
-    private final float outlineWidth = 1f;
+    private final Vector2[] vertexBuffer;
 
-    public HexMapRenderer(HexMap map, Batch batch) {
+    public HexMapRenderer(HexMap map, HexMapLayout layout, Batch batch) {
         this.map = map;
         this.batch = batch;
-        shapeRenderer = new ShapeRenderer();
-        layout = new Layout(Layout.FLAT, new Vector2(100f, 100f), Vector2.Zero);
-        viewBounds = new Rectangle();
+        this.layout = layout;
+        this.shapeRenderer = new ShapeRenderer();
+        this.viewBounds = new Rectangle();
+        
+        vertexBuffer = new Vector2[6];
+        for(int i = 0; i < 6; i++) {
+            vertexBuffer[i] = new Vector2();
+        }
     }
 
     public void setView(OrthographicCamera camera) {
@@ -44,8 +48,8 @@ public class HexMapRenderer {
             Vector2 coord = layout.hexToCartesian(hex);
             if(!viewBounds.contains(coord))
                 continue;
-            drawOutline(hex);
             Cell cell = map.getCell(hex);
+            drawOutline(hex, cell);
             for(Layer l : cell.getLayers()) {
                 drawLayer(l);
             }
@@ -55,11 +59,14 @@ public class HexMapRenderer {
         shapeRenderer.end();
     }
     
-    private void drawOutline(Hex hex) {
-        shapeRenderer.setColor(1, 1, 0, 1);
-        Vector2[] vertices = layout.getVertices(hex);
-        for(int i = 0; i < vertices.length; i++) {
-            shapeRenderer.rectLine(vertices[i], vertices[(i+1)%6], outlineWidth);
+    private void drawOutline(Hex hex, Cell cell) {
+        if(cell.selected)
+            shapeRenderer.setColor(0, 0, 1, 1);
+        else
+            shapeRenderer.setColor(1, 1, 0, 1);
+        layout.getVertices(hex, vertexBuffer);
+        for(int i = 0; i < vertexBuffer.length; i++) {
+            shapeRenderer.line(vertexBuffer[i], vertexBuffer[(i+1)%6]);
         }
     }
     

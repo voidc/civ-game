@@ -5,9 +5,13 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
 
+import de.gymwkb.civ.input.CameraController;
+import de.gymwkb.civ.input.MapController;
 import de.gymwkb.civ.map.Hex;
 import de.gymwkb.civ.map.HexMap;
+import de.gymwkb.civ.map.HexMapLayout;
 import de.gymwkb.civ.map.HexMap.Cell;
 import de.gymwkb.civ.map.HexMapRenderer;
 
@@ -15,6 +19,7 @@ public class GameScreen implements Screen {
     private final CivGame game;
     private OrthographicCamera camera;
     private HexMap map;
+    private HexMapLayout layout;
     private HexMapRenderer renderer;
 
     public GameScreen(CivGame game) {
@@ -23,16 +28,19 @@ public class GameScreen implements Screen {
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
 
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, (w / h) * 480, 480);
-        camera.update();
+        this.camera = new OrthographicCamera();
+        this.camera.setToOrtho(false, (w / h) * 480, 480);
+        this.camera.update();
+        
+        this.map = testMap();
+        this.layout = new HexMapLayout(HexMapLayout.FLAT, new Vector2(100f, 100f), new Vector2());
+        this.renderer = new HexMapRenderer(map, layout, game.batch);
         
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(new CameraController(camera));
+        inputMultiplexer.addProcessor(new MapController(map, layout, camera));
         Gdx.input.setInputProcessor(inputMultiplexer);
 
-        map = testMap();
-        renderer = new HexMapRenderer(map, game.batch);
     }
     
     /**

@@ -1,4 +1,4 @@
-package de.gymwkb.civ;
+package de.gymwkb.civ.input;
 
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;

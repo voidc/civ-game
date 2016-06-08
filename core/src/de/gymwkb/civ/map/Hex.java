@@ -41,7 +41,4 @@ public class Hex {
             return false;
         return true;
     }
-    
-    
-
 }

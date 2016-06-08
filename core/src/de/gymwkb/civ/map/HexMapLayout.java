@@ -13,11 +13,21 @@ public class HexMapLayout {
     private Orientation orientation;
     private Vector2 size;
     private Vector2 origin;
+    
+    private final Vector2[] offsets;
 
     public HexMapLayout(Orientation orientation, Vector2 size, Vector2 origin) {
         this.orientation = orientation;
         this.size = size;
         this.origin = origin;
+        this.offsets = new Vector2[6];
+        recalculate();
+    }
+    
+    public void recalculate() {
+        for(int i = 0; i < 6; i++) {
+            offsets[i] = vertexOffset(i);
+        }  
     }
 
     public Vector2 hexToCartesian(Hex h) {
@@ -59,8 +69,7 @@ public class HexMapLayout {
         Vector2[] vertices = new Vector2[6];
         Vector2 center = hexToCartesian(h);
         for (int i = 0; i < 6; i++) {
-            Vector2 offset = vertexOffset(i);
-            vertices[i] = new Vector2(center.x + offset.x, center.y + offset.y);
+            vertices[i] = center.add(offsets[i]);
         }
         return vertices;
     }
@@ -68,7 +77,7 @@ public class HexMapLayout {
     public void getVertices(Hex h, Vector2[] buffer) {
         Vector2 center = hexToCartesian(h);
         for (int i = 0; i < 6; i++) {
-            buffer[i].set(center.add(vertexOffset(i)));
+            buffer[i].set(center.add(offsets[i]));
         }
     }
 
