@@ -1,6 +1,7 @@
 package de.gymwkb.civ.map;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class HexMapLayout {
@@ -28,6 +29,10 @@ public class HexMapLayout {
         for(int i = 0; i < 6; i++) {
             offsets[i] = vertexOffset(i);
         }  
+    }
+    
+    public boolean isFlat() {
+        return orientation == FLAT;
     }
 
     public Vector2 hexToCartesian(Hex h) {
@@ -59,6 +64,13 @@ public class HexMapLayout {
         }
         return new Hex(q, r, s);
     }
+    
+    public Rectangle getTextureBounds(Hex hex) {
+        float width = orientation.b0 * 3 * size.x;
+        float height = orientation.b3 * 3 * size.y;
+        Vector2 center = hexToCartesian(hex);
+        return new Rectangle(center.x - width / 2, center.y - height / 2, width, height);
+    }
 
     private Vector2 vertexOffset(int corner) {
         float angle = 2.0f * MathUtils.PI * (corner + orientation.start_angle) / 6;
@@ -69,7 +81,7 @@ public class HexMapLayout {
         Vector2[] vertices = new Vector2[6];
         Vector2 center = hexToCartesian(h);
         for (int i = 0; i < 6; i++) {
-            vertices[i] = center.add(offsets[i]);
+            vertices[i].set(center.x + offsets[i].x, center.y + offsets[i].y);
         }
         return vertices;
     }
@@ -77,7 +89,7 @@ public class HexMapLayout {
     public void getVertices(Hex h, Vector2[] buffer) {
         Vector2 center = hexToCartesian(h);
         for (int i = 0; i < 6; i++) {
-            buffer[i].set(center.add(offsets[i]));
+            buffer[i].set(center.x + offsets[i].x, center.y + offsets[i].y);
         }
     }
 
