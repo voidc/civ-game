@@ -51,7 +51,7 @@ public class HexMapRenderer {
             Cell cell = map.getCell(hex);
             drawOutline(hex, cell);
             for(Layer l : cell.getLayers()) {
-                drawLayer(l);
+                drawLayer(hex, l);
             }
         }
         
@@ -60,17 +60,17 @@ public class HexMapRenderer {
     }
     
     private void drawOutline(Hex hex, Cell cell) {
-        if(cell.selected)
-            shapeRenderer.setColor(0, 0, 1, 1);
-        else
-            shapeRenderer.setColor(1, 1, 0, 1);
+        shapeRenderer.setColor(1, 1, 0, 1);
         layout.getVertices(hex, vertexBuffer);
         for(int i = 0; i < vertexBuffer.length; i++) {
             shapeRenderer.line(vertexBuffer[i], vertexBuffer[(i+1)%6]);
         }
     }
     
-    private void drawLayer(Cell.Layer layer) {
-        //TODO: draw textures
+    private void drawLayer(Hex hex, Cell.Layer layer) {
+        if(layer == null || layer.getTexture() == null)
+            return;
+        Rectangle bounds = layout.getTextureBounds(hex);
+        batch.draw(layer.getTexture(), bounds.x, bounds.y, bounds.width, bounds.height);
     }
 }

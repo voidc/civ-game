@@ -7,7 +7,10 @@ import com.badlogic.gdx.math.Vector3;
 
 import de.gymwkb.civ.map.Hex;
 import de.gymwkb.civ.map.HexMap;
+import de.gymwkb.civ.map.HexMap.Cell;
+import de.gymwkb.civ.map.HexMap.LayerType;
 import de.gymwkb.civ.map.HexMapLayout;
+import de.gymwkb.civ.map.SelectionLayer;
 
 public class MapController extends InputAdapter {
     private HexMap map;
@@ -16,11 +19,13 @@ public class MapController extends InputAdapter {
     private final Vector3 mousePos3 = new Vector3();
     private final Vector2 mousePos2 = new Vector2();
     private Hex lastHex;
+    private SelectionLayer selLayer;
     
-    public MapController(HexMap map, HexMapLayout layout, OrthographicCamera camera) {
+    public MapController(HexMap map, HexMapLayout layout, OrthographicCamera camera, SelectionLayer selLayer) {
         this.map = map;
         this.layout = layout;
         this.camera = camera;
+        this.selLayer = selLayer;
     }
     
     public Hex getSelectedHex() {
@@ -30,14 +35,11 @@ public class MapController extends InputAdapter {
     public void setSelectedHex(Hex hex) {
         if(hex != null && !hex.equals(lastHex) && map.contains(hex)) {
             if(lastHex == null) {
-//                map.getCell(hex).setLayer(LayerType.FOREGROUND, new SelectionLayer());
-                map.getCell(hex).selected = true;
+                map.getCell(hex).setLayer(LayerType.FOREGROUND, selLayer);
             } else {           
-//                Cell last = map.getCell(lastHex);
-//                map.getCell(hex).setLayer(LayerType.FOREGROUND, last.getLayer(LayerType.FOREGROUND));
-//                last.setLayer(LayerType.FOREGROUND, null);
-                map.getCell(lastHex).selected = false;
-                map.getCell(hex).selected = true;
+                Cell last = map.getCell(lastHex);
+                map.getCell(hex).setLayer(LayerType.FOREGROUND, last.getLayer(LayerType.FOREGROUND));
+                last.setLayer(LayerType.FOREGROUND, null);
             }
             lastHex = hex;
         }

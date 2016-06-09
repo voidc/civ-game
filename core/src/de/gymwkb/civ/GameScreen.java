@@ -5,6 +5,8 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import de.gymwkb.civ.input.CameraController;
@@ -13,7 +15,10 @@ import de.gymwkb.civ.map.Hex;
 import de.gymwkb.civ.map.HexMap;
 import de.gymwkb.civ.map.HexMapLayout;
 import de.gymwkb.civ.map.HexMap.Cell;
+import de.gymwkb.civ.map.HexMap.LayerType;
 import de.gymwkb.civ.map.HexMapRenderer;
+import de.gymwkb.civ.map.SelectionLayer;
+import de.gymwkb.civ.map.TextureLayer;
 
 public class GameScreen implements Screen {
     private final CivGame game;
@@ -21,6 +26,9 @@ public class GameScreen implements Screen {
     private HexMap map;
     private HexMapLayout layout;
     private HexMapRenderer renderer;
+    private Texture hexture;
+    private TextureLayer testLayer;
+    private SelectionLayer selLayer;
 
     public GameScreen(CivGame game) {
         this.game = game;
@@ -32,13 +40,20 @@ public class GameScreen implements Screen {
         this.camera.setToOrtho(false, (w / h) * 480, 480);
         this.camera.update();
         
+        
+        
+        hexture = new Texture(Gdx.files.internal("hexes-ft100.png"));
+        selLayer = new SelectionLayer(new TextureRegion(hexture, 0, 0, 200, 173));
+        testLayer = new TextureLayer(new TextureRegion(hexture, 200, 0, 200, 173));
+        
+        
         this.map = testMap();
         this.layout = new HexMapLayout(HexMapLayout.FLAT, new Vector2(100f, 100f), new Vector2());
         this.renderer = new HexMapRenderer(map, layout, game.batch);
         
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(new CameraController(camera));
-        inputMultiplexer.addProcessor(new MapController(map, layout, camera));
+        inputMultiplexer.addProcessor(new MapController(map, layout, camera, selLayer));
         Gdx.input.setInputProcessor(inputMultiplexer);
 
     }
@@ -48,9 +63,10 @@ public class GameScreen implements Screen {
      */
     private HexMap testMap() {
         HexMap map = new HexMap();
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < 20; i++) {
             for(int j = 0; j < 10; j++) {
                 Cell c = new Cell();
+                c.setLayer(LayerType.TERRAIN, testLayer);
                 map.addCell(new Hex(i, j, -i-j), c);
             }
         }
@@ -93,6 +109,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        hexture.dispose();
     }
 }
