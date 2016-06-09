@@ -1,7 +1,8 @@
 package de.gymwkb.civ.map;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.OrderedMap;
+
+import de.gymwkb.civ.registry.HextureRegistry.Hexture;
 
 public class HexMap {
     private final OrderedMap<Hex, Cell> cells;
@@ -52,7 +53,7 @@ public class HexMap {
         }
 
         public interface Layer {
-            TextureRegion getTexture();
+            Hexture getHexture();
         }
     }
 

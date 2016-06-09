@@ -1,11 +1,11 @@
 package de.gymwkb.civ.map;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import de.gymwkb.civ.registry.HextureRegistry.Hexture;
 
-public class SelectionLayer extends TextureLayer {
+public class SelectionLayer extends Terrain {
 
-    public SelectionLayer(TextureRegion texture) {
-        super(texture);
+    public SelectionLayer() {
+        super(Hexture.SELECTION);
     }
 
 }

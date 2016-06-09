@@ -2,6 +2,7 @@ package de.gymwkb.civ.map;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import de.gymwkb.civ.map.HexMap.Cell;
 import de.gymwkb.civ.map.HexMap.Cell.Layer;
+import de.gymwkb.civ.registry.HextureRegistry;
 
 public class HexMapRenderer {
     private HexMap map;
@@ -16,13 +18,15 @@ public class HexMapRenderer {
     private ShapeRenderer shapeRenderer;
     private HexMapLayout layout;
     private Rectangle viewBounds;
+    private HextureRegistry hexreg;
     
     private final Vector2[] vertexBuffer;
 
-    public HexMapRenderer(HexMap map, HexMapLayout layout, Batch batch) {
+    public HexMapRenderer(HexMap map, HexMapLayout layout, Batch batch, HextureRegistry hexreg) {
         this.map = map;
         this.batch = batch;
         this.layout = layout;
+        this.hexreg = hexreg;
         this.shapeRenderer = new ShapeRenderer();
         this.viewBounds = new Rectangle();
         
@@ -68,9 +72,10 @@ public class HexMapRenderer {
     }
     
     private void drawLayer(Hex hex, Cell.Layer layer) {
-        if(layer == null || layer.getTexture() == null)
+        if(layer == null || layer.getHexture() == null)
             return;
+        TextureRegion texture = hexreg.getTexture(layer.getHexture());
         Rectangle bounds = layout.getTextureBounds(hex);
-        batch.draw(layer.getTexture(), bounds.x, bounds.y, bounds.width, bounds.height);
+        batch.draw(texture, bounds.x, bounds.y, bounds.width, bounds.height);
     }
 }

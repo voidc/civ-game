@@ -19,13 +19,11 @@ public class MapController extends InputAdapter {
     private final Vector3 mousePos3 = new Vector3();
     private final Vector2 mousePos2 = new Vector2();
     private Hex lastHex;
-    private SelectionLayer selLayer;
     
-    public MapController(HexMap map, HexMapLayout layout, OrthographicCamera camera, SelectionLayer selLayer) {
+    public MapController(HexMap map, HexMapLayout layout, OrthographicCamera camera) {
         this.map = map;
         this.layout = layout;
         this.camera = camera;
-        this.selLayer = selLayer;
     }
     
     public Hex getSelectedHex() {
@@ -35,7 +33,7 @@ public class MapController extends InputAdapter {
     public void setSelectedHex(Hex hex) {
         if(hex != null && !hex.equals(lastHex) && map.contains(hex)) {
             if(lastHex == null) {
-                map.getCell(hex).setLayer(LayerType.FOREGROUND, selLayer);
+                map.getCell(hex).setLayer(LayerType.FOREGROUND, new SelectionLayer());
             } else {           
                 Cell last = map.getCell(lastHex);
                 map.getCell(hex).setLayer(LayerType.FOREGROUND, last.getLayer(LayerType.FOREGROUND));

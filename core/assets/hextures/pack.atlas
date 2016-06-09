@@ -1,0 +1,20 @@
+
+pack.png
+size: 512,256
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+SELECTION
+  rotate: false
+  xy: 2, 2
+  size: 200, 173
+  orig: 200, 173
+  offset: 0, 0
+  index: -1
+TERRAIN_DEFAULT
+  rotate: false
+  xy: 204, 2
+  size: 200, 173
+  orig: 200, 173
+  offset: 0, 0
+  index: -1

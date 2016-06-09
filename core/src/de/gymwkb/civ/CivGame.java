@@ -3,8 +3,6 @@ package de.gymwkb.civ;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import de.gymwkb.civ.registry.Registry;
-
 public class CivGame extends Game {
     SpriteBatch batch;
 
@@ -22,6 +20,5 @@ public class CivGame extends Game {
     @Override
     public void dispose() {
         batch.dispose();
-        Registry.disposeInstance();
     }
 }

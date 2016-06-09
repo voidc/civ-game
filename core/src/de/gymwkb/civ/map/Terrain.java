@@ -2,10 +2,10 @@ package de.gymwkb.civ.map;
 
 import de.gymwkb.civ.registry.HextureRegistry.Hexture;
 
-public class Unit implements HexMap.Cell.Layer {
+public class Terrain implements HexMap.Cell.Layer {
     private Hexture hexture;
     
-    public Unit(Hexture hexture) {
+    public Terrain(Hexture hexture) {
         this.hexture = hexture;
     }
 
