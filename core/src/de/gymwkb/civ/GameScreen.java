@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.gymwkb.civ.input.CameraController;
 import de.gymwkb.civ.input.MapController;
@@ -23,11 +26,14 @@ import de.gymwkb.civ.registry.HextureRegistry.Hexture;
 public class GameScreen implements Screen {
     private final CivGame game;
     private OrthographicCamera camera;
+    private Viewport viewport;
     private HexMap map;
     private HexMapLayout layout;
     private HexMapRenderer renderer;
     private TextureAtlas hextures;
     private HextureRegistry hexreg;
+    
+    public static final float WORLD_HEIGHT = 480f;
 
     public GameScreen(CivGame game) {
         this.game = game;
@@ -36,8 +42,9 @@ public class GameScreen implements Screen {
         float h = Gdx.graphics.getHeight();
 
         this.camera = new OrthographicCamera();
-        this.camera.setToOrtho(false, (w / h) * 480, 480);
+        this.camera.setToOrtho(false, (w / h) * WORLD_HEIGHT, WORLD_HEIGHT);
         this.camera.update();
+        this.viewport = new ScreenViewport(camera);
         
         hextures = new TextureAtlas(Gdx.files.internal("hextures/pack.atlas"));
         hexreg = new HextureRegistry(hextures);
@@ -85,7 +92,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        viewport.update(width, height);
     }
 
     @Override
