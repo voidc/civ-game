@@ -39,8 +39,8 @@ public class HexMapRenderer {
     public void setView(OrthographicCamera camera) {
         shapeRenderer.setProjectionMatrix(camera.combined);
         batch.setProjectionMatrix(camera.combined);
-        float width = camera.viewportWidth * camera.zoom;
-        float height = camera.viewportHeight * camera.zoom;
+        float width = camera.viewportWidth * camera.zoom + layout.getHexWidth();
+        float height = camera.viewportHeight * camera.zoom + layout.getHexHeight();
         viewBounds.set(camera.position.x - width / 2, camera.position.y - height / 2, width, height);
     }
 

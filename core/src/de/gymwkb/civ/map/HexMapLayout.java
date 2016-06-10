@@ -14,6 +14,8 @@ public class HexMapLayout {
     private Orientation orientation;
     private Vector2 size;
     private Vector2 origin;
+    private float hexWidth;
+    private float hexHeight;
     
     private final Vector2[] offsets;
 
@@ -29,10 +31,20 @@ public class HexMapLayout {
         for(int i = 0; i < 6; i++) {
             offsets[i] = vertexOffset(i);
         }  
+        hexWidth = orientation.b0 * 3 * size.x;
+        hexHeight = orientation.b3 * 3 * size.y;
     }
     
     public boolean isFlat() {
         return orientation == FLAT;
+    }
+
+    public float getHexWidth() {
+        return hexWidth;
+    }
+
+    public float getHexHeight() {
+        return hexHeight;
     }
 
     public Vector2 hexToCartesian(Hex h) {
@@ -66,10 +78,8 @@ public class HexMapLayout {
     }
     
     public Rectangle getTextureBounds(Hex hex) {
-        float width = orientation.b0 * 3 * size.x;
-        float height = orientation.b3 * 3 * size.y;
         Vector2 center = hexToCartesian(hex);
-        return new Rectangle(center.x - width / 2, center.y - height / 2, width, height);
+        return new Rectangle(center.x - hexWidth / 2, center.y - hexHeight / 2, hexWidth, hexHeight);
     }
 
     private Vector2 vertexOffset(int corner) {
