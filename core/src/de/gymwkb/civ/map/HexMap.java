@@ -4,6 +4,9 @@ import com.badlogic.gdx.utils.OrderedMap;
 
 import de.gymwkb.civ.registry.Hexture;
 
+/**
+ * The HexMap is responsible for storing all hex cells and their position.
+ */
 public class HexMap {
     private final OrderedMap<Hex, Cell> cells;
 
@@ -46,6 +49,10 @@ public class HexMap {
         return cells.size;
     }
 
+    /**
+     * A cell is one hexagon on the map.
+     * It consists of one {@link Layer} for each {@link LayerType}.
+     */
     public static class Cell {
         private Layer[] layers;
 
