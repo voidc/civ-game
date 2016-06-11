@@ -19,6 +19,7 @@ import de.gymwkb.civ.map.HexMap.Cell;
 import de.gymwkb.civ.map.HexMap.LayerType;
 import de.gymwkb.civ.map.HexMapLayout;
 import de.gymwkb.civ.map.HexMapRenderer;
+import de.gymwkb.civ.map.HexagonGenerator;
 import de.gymwkb.civ.map.Terrain;
 import de.gymwkb.civ.registry.HextureRegistry;
 import de.gymwkb.civ.registry.HextureRegistry.Hexture;
@@ -27,6 +28,7 @@ public class GameScreen implements Screen {
     private final CivGame game;
     private OrthographicCamera camera;
     private Viewport viewport;
+    private HexagonGenerator generator;
     private HexMap map;
     private HexMapLayout layout;
     private HexMapRenderer renderer;
@@ -49,7 +51,8 @@ public class GameScreen implements Screen {
         hextures = new TextureAtlas(Gdx.files.internal("hextures/pack.atlas"));
         hexreg = new HextureRegistry(hextures);
         
-        this.map = testMap();
+        this.generator = new HexagonGenerator();
+        this.map = generator.generateMap(HexagonGenerator.SIZE, false);
         this.layout = new HexMapLayout(HexMapLayout.FLAT, new Vector2(100f, 100f), new Vector2());
         this.renderer = new HexMapRenderer(map, layout, game.batch, hexreg);
         

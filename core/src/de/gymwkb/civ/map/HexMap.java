@@ -7,8 +7,8 @@ import de.gymwkb.civ.registry.HextureRegistry.Hexture;
 public class HexMap {
     private final OrderedMap<Hex, Cell> cells;
 
-    public static final Hex[] NEIGHBORS = new Hex[] {new Hex(1, 0, 0), new Hex(0, 1, 0), new Hex(0, 0, 1),
-            new Hex(-1, 0, 0), new Hex(0, -1, 0), new Hex(0, 0, -1)};
+    public static final Hex[] NEIGHBORS = new Hex[] {new Hex(1, -1, 0), new Hex(0, 1, -1), new Hex(-1, 0, 1),
+            new Hex(-1, 1, 0), new Hex(0, -1, 1), new Hex(1, 0, -1)};
     public static final int LAYER_COUNT = LayerType.values().length;
 
     public HexMap() {
@@ -22,13 +22,21 @@ public class HexMap {
     public Cell getCell(Hex hex) {
         return cells.get(hex);
     }
-    
+
     public boolean contains(Hex hex) {
         return cells.containsKey(hex);
     }
 
     public void addCell(Hex hex, Cell cell) {
         cells.put(hex, cell);
+    }
+
+    public Hex getHexAt(int index) {
+        return cells.orderedKeys().get(index);
+    }
+
+    public int getSize() {
+        return cells.size;
     }
 
     public static class Cell {
@@ -43,11 +51,11 @@ public class HexMap {
         public Layer getLayer(LayerType type) {
             return layers[type.ordinal()];
         }
-        
+
         public void setLayer(LayerType type, Layer layer) {
             layers[type.ordinal()] = layer;
         }
-        
+
         public Layer[] getLayers() {
             return layers;
         }
@@ -58,8 +66,6 @@ public class HexMap {
     }
 
     public enum LayerType {
-        TERRAIN,
-        UNIT,
-        FOREGROUND
+        TERRAIN, UNIT, FOREGROUND
     }
 }
