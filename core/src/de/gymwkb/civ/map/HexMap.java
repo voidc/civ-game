@@ -2,7 +2,7 @@ package de.gymwkb.civ.map;
 
 import com.badlogic.gdx.utils.OrderedMap;
 
-import de.gymwkb.civ.registry.HextureRegistry.Hexture;
+import de.gymwkb.civ.registry.Hexture;
 
 public class HexMap {
     private final OrderedMap<Hex, Cell> cells;
@@ -15,10 +15,17 @@ public class HexMap {
         this.cells = new OrderedMap<Hex, Cell>();
     }
 
+    /**
+     * @return An iterator of all hex coordinates in the map (use {@link #getCell} to retrieve the corresponding cell)
+     */
     public Iterable<Hex> getHexes() {
         return cells.keys();
     }
 
+    /**
+     * @param hex The hex coordinate of the cell to be retrieved
+     * @return The cell object at the given hex coordinate containing layers
+     */
     public Cell getCell(Hex hex) {
         return cells.get(hex);
     }
@@ -41,11 +48,9 @@ public class HexMap {
 
     public static class Cell {
         private Layer[] layers;
-        public boolean selected;
 
         public Cell() {
             layers = new Layer[LAYER_COUNT];
-            selected = false;
         }
 
         public Layer getLayer(LayerType type) {

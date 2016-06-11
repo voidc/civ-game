@@ -21,8 +21,7 @@ import de.gymwkb.civ.map.HexMapLayout;
 import de.gymwkb.civ.map.HexMapRenderer;
 import de.gymwkb.civ.map.HexagonGenerator;
 import de.gymwkb.civ.map.Terrain;
-import de.gymwkb.civ.registry.HextureRegistry;
-import de.gymwkb.civ.registry.HextureRegistry.Hexture;
+import de.gymwkb.civ.registry.Hexture;
 
 public class GameScreen implements Screen {
     private final CivGame game;
@@ -33,7 +32,6 @@ public class GameScreen implements Screen {
     private HexMapLayout layout;
     private HexMapRenderer renderer;
     private TextureAtlas hextures;
-    private HextureRegistry hexreg;
     
     public static final float WORLD_HEIGHT = 480f;
 
@@ -49,12 +47,12 @@ public class GameScreen implements Screen {
         this.viewport = new ScreenViewport(camera);
         
         hextures = new TextureAtlas(Gdx.files.internal("hextures/pack.atlas"));
-        hexreg = new HextureRegistry(hextures);
         
         this.generator = new HexagonGenerator();
         this.map = generator.generateMap(HexagonGenerator.SIZE, false);
         this.layout = new HexMapLayout(HexMapLayout.FLAT, new Vector2(100f, 100f), new Vector2());
-        this.renderer = new HexMapRenderer(map, layout, game.batch, hexreg);
+        this.renderer = new HexMapRenderer(map, layout, game.batch);
+        renderer.loadHextures(hextures);
         
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(new CameraController(camera));

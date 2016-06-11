@@ -1,8 +1,12 @@
 package de.gymwkb.civ.map;
 
+import java.util.MissingResourceException;
+
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
@@ -10,7 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import de.gymwkb.civ.map.HexMap.Cell;
 import de.gymwkb.civ.map.HexMap.Cell.Layer;
-import de.gymwkb.civ.registry.HextureRegistry;
+import de.gymwkb.civ.registry.Hexture;
 
 public class HexMapRenderer {
     private HexMap map;
@@ -18,15 +22,14 @@ public class HexMapRenderer {
     private ShapeRenderer shapeRenderer;
     private HexMapLayout layout;
     private Rectangle viewBounds;
-    private HextureRegistry hexreg;
-    
+    private AtlasRegion[] cachedHextures;
+
     private final Vector2[] vertexBuffer;
 
-    public HexMapRenderer(HexMap map, HexMapLayout layout, Batch batch, HextureRegistry hexreg) {
+    public HexMapRenderer(HexMap map, HexMapLayout layout, Batch batch) {
         this.map = map;
         this.batch = batch;
         this.layout = layout;
-        this.hexreg = hexreg;
         this.shapeRenderer = new ShapeRenderer();
         this.viewBounds = new Rectangle();
         
@@ -36,6 +39,9 @@ public class HexMapRenderer {
         }
     }
 
+    /**
+     * Sets the projection matrix and also calculates which part of the map should be rendered
+     */
     public void setView(OrthographicCamera camera) {
         shapeRenderer.setProjectionMatrix(camera.combined);
         batch.setProjectionMatrix(camera.combined);
@@ -44,6 +50,35 @@ public class HexMapRenderer {
         viewBounds.set(camera.position.x - width / 2, camera.position.y - height / 2, width, height);
     }
 
+    /**
+     * Trys to find an {@link AtlasRegion} for each {@link Hexture} and stores them.
+     * If a region cannot be fond an RuntimeException is thrown.
+     * MUST be called before rendering.
+     * @param atlas An TextureAtlas containing textures for each hexture defined in {@link Hexture}
+     */
+    public void loadHextures(TextureAtlas atlas) {
+        Hexture[] types = Hexture.values();
+        cachedHextures = new AtlasRegion[types.length];
+        for(int i = 0; i < types.length; i++) {
+            AtlasRegion reg = atlas.findRegion(types[i].name());
+            if(reg == null)
+                throw new RuntimeException("Hexture " + types[i].name() + " not found in atlas!");
+            cachedHextures[i] = reg;
+        }
+    }
+
+    /**
+     * {@link #loadHextures} must be called before using this method.
+     * @return An AtlasRegion with the texture for the given hexture.
+     */
+    public AtlasRegion getCachedHexture(Hexture hexture) {
+        return cachedHextures[hexture.ordinal()];
+    }
+
+    /**
+     * Draws the visible part of the map using the Batch for the cell layers and a ShapeRenderer for the outline of each cell.
+     * {@link #loadHextures} must be called before using this method.
+     */
     public void render() {
         shapeRenderer.begin(ShapeType.Line);
         batch.begin();
@@ -74,7 +109,7 @@ public class HexMapRenderer {
     private void drawLayer(Hex hex, Cell.Layer layer) {
         if(layer == null || layer.getHexture() == null)
             return;
-        TextureRegion texture = hexreg.getTexture(layer.getHexture());
+        TextureRegion texture = getCachedHexture(layer.getHexture());
         Rectangle bounds = layout.getTextureBounds(hex);
         batch.draw(texture, bounds.x, bounds.y, bounds.width, bounds.height);
     }

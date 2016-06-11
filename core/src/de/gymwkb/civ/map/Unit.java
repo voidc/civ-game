@@ -1,6 +1,6 @@
 package de.gymwkb.civ.map;
 
-import de.gymwkb.civ.registry.HextureRegistry.Hexture;
+import de.gymwkb.civ.registry.Hexture;
 
 public class Unit implements HexMap.Cell.Layer {
     private Hexture hexture;

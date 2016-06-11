@@ -4,7 +4,7 @@ import java.util.Random;
 
 import de.gymwkb.civ.map.HexMap.Cell;
 import de.gymwkb.civ.map.HexMap.LayerType;
-import de.gymwkb.civ.registry.HextureRegistry.Hexture;
+import de.gymwkb.civ.registry.Hexture;
 
 public class HexagonGenerator {
     public static final int SIZE = 100;
