@@ -66,9 +66,8 @@ public class HexagonGenerator {
     }
 
     public Cell generateCell() {
-        Terrain defaultTerrain = new Terrain(Hexture.TERRAIN_DEFAULT);
         Cell c = new Cell();
-        c.setLayer(LayerType.TERRAIN, defaultTerrain);
+        c.setLayer(LayerType.TERRAIN, Terrain.DEFAULT);
         return c;
     }
 

@@ -1,13 +1,13 @@
 package de.gymwkb.civ.registry;
 
 import de.gymwkb.civ.map.HexMap;
-import de.gymwkb.civ.map.HexMap.Cell;
-import de.gymwkb.civ.map.HexMap.Cell.ILayer;
 
-public class Terrain implements HexMap.Cell.ILayer {
+public enum Terrain implements HexMap.Cell.ILayer {
+    DEFAULT(Hexture.TERRAIN_DEFAULT);
+    
     private Hexture hexture;
     
-    public Terrain(Hexture hexture) {
+    private Terrain(Hexture hexture) {
         this.hexture = hexture;
     }
 
