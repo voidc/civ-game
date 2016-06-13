@@ -25,6 +25,7 @@ public class GameScreen implements Screen {
     private HexMap map;
     private HexMapRenderer renderer;
     private TextureAtlas hextures;
+    private HUD hud;
     
     public static final float WORLD_HEIGHT = 480f;
 
@@ -39,7 +40,9 @@ public class GameScreen implements Screen {
         this.camera.update();
         this.viewport = new ScreenViewport(camera);
         
-        hextures = new TextureAtlas(Gdx.files.internal("hextures/pack.atlas"));
+        this.hud = new HUD();
+        
+        hextures = game.assets.get("hextures/pack.atlas");
         
         HexMapLayout layout = new HexMapLayout(HexMapLayout.FLAT, new Vector2(100f, 100f), new Vector2());
         this.generator = new HexagonGenerator(layout);
@@ -48,19 +51,23 @@ public class GameScreen implements Screen {
         renderer.loadHextures(hextures);
         
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(hud);
         inputMultiplexer.addProcessor(new CameraController(camera));
         inputMultiplexer.addProcessor(new MapController(map, layout, camera));
         Gdx.input.setInputProcessor(inputMultiplexer);
-
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0.25f, 0.25f, 0.25f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        viewport.apply();
         camera.update();
         renderer.setView(camera);
         renderer.render();
+        hud.getViewport().apply();
+        hud.act(delta);
+        hud.draw();
     }
 
     @Override
@@ -71,6 +78,7 @@ public class GameScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
+        hud.getViewport().update(width, height, true);
     }
 
     @Override
@@ -91,5 +99,6 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         hextures.dispose();
+        hud.dispose();
     }
 }
