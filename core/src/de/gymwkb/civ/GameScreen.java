@@ -7,21 +7,15 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.gymwkb.civ.input.CameraController;
 import de.gymwkb.civ.input.MapController;
-import de.gymwkb.civ.map.Hex;
 import de.gymwkb.civ.map.HexMap;
-import de.gymwkb.civ.map.HexMap.Cell;
-import de.gymwkb.civ.map.HexMap.LayerType;
 import de.gymwkb.civ.map.HexMapLayout;
 import de.gymwkb.civ.map.HexMapRenderer;
 import de.gymwkb.civ.map.HexagonGenerator;
-import de.gymwkb.civ.map.Terrain;
-import de.gymwkb.civ.registry.Hexture;
 
 public class GameScreen implements Screen {
     private final CivGame game;
@@ -29,7 +23,6 @@ public class GameScreen implements Screen {
     private Viewport viewport;
     private HexagonGenerator generator;
     private HexMap map;
-    private HexMapLayout layout;
     private HexMapRenderer renderer;
     private TextureAtlas hextures;
     
@@ -48,10 +41,10 @@ public class GameScreen implements Screen {
         
         hextures = new TextureAtlas(Gdx.files.internal("hextures/pack.atlas"));
         
-        this.generator = new HexagonGenerator();
+        HexMapLayout layout = new HexMapLayout(HexMapLayout.FLAT, new Vector2(100f, 100f), new Vector2());
+        this.generator = new HexagonGenerator(layout);
         this.map = generator.generateMap(HexagonGenerator.SIZE, false);
-        this.layout = new HexMapLayout(HexMapLayout.FLAT, new Vector2(100f, 100f), new Vector2());
-        this.renderer = new HexMapRenderer(map, layout, game.batch);
+        this.renderer = new HexMapRenderer(map, game.batch);
         renderer.loadHextures(hextures);
         
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
@@ -59,22 +52,6 @@ public class GameScreen implements Screen {
         inputMultiplexer.addProcessor(new MapController(map, layout, camera));
         Gdx.input.setInputProcessor(inputMultiplexer);
 
-    }
-    
-    /**
-     * Zu Testzwecken bis Martin fertig ist.
-     */
-    private HexMap testMap() {
-        HexMap map = new HexMap();
-        Terrain defaultTerrain = new Terrain(Hexture.TERRAIN_DEFAULT);
-        for(int i = 0; i < 20; i++) {
-            for(int j = 0; j < 10; j++) {
-                Cell c = new Cell();
-                c.setLayer(LayerType.TERRAIN, defaultTerrain);
-                map.addCell(new Hex(i, j, -i-j), c);
-            }
-        }
-        return map;
     }
 
     @Override

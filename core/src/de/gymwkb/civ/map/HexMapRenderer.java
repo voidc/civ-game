@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import de.gymwkb.civ.map.HexMap.Cell;
-import de.gymwkb.civ.map.HexMap.Cell.Layer;
+import de.gymwkb.civ.map.HexMap.Cell.ILayer;
 import de.gymwkb.civ.registry.Hexture;
 
 public class HexMapRenderer {
@@ -24,10 +24,10 @@ public class HexMapRenderer {
 
     private final Vector2[] vertexBuffer;
 
-    public HexMapRenderer(HexMap map, HexMapLayout layout, Batch batch) {
+    public HexMapRenderer(HexMap map, Batch batch) {
         this.map = map;
         this.batch = batch;
-        this.layout = layout;
+        this.layout = map.layout;
         this.shapeRenderer = new ShapeRenderer();
         this.viewBounds = new Rectangle();
         
@@ -87,7 +87,7 @@ public class HexMapRenderer {
                 continue;
             Cell cell = map.getCell(hex);
             drawOutline(hex, cell);
-            for(Layer l : cell.getLayers()) {
+            for(ILayer l : cell.getLayers()) {
                 drawLayer(hex, l);
             }
         }
@@ -104,7 +104,7 @@ public class HexMapRenderer {
         }
     }
     
-    private void drawLayer(Hex hex, Cell.Layer layer) {
+    private void drawLayer(Hex hex, Cell.ILayer layer) {
         if(layer == null || layer.getHexture() == null)
             return;
         TextureRegion texture = getCachedHexture(layer.getHexture());

@@ -9,13 +9,15 @@ import de.gymwkb.civ.registry.Hexture;
  */
 public class HexMap {
     private final OrderedMap<Hex, Cell> cells;
+    public final HexMapLayout layout;
 
     public static final Hex[] NEIGHBORS = new Hex[] {new Hex(1, -1, 0), new Hex(0, 1, -1), new Hex(-1, 0, 1),
             new Hex(-1, 1, 0), new Hex(0, -1, 1), new Hex(1, 0, -1)};
     public static final int LAYER_COUNT = LayerType.values().length;
 
-    public HexMap() {
+    public HexMap(HexMapLayout layout) {
         this.cells = new OrderedMap<Hex, Cell>();
+        this.layout = layout;
     }
 
     /**
@@ -51,28 +53,28 @@ public class HexMap {
 
     /**
      * A cell is one hexagon on the map.
-     * It consists of one {@link Layer} for each {@link LayerType}.
+     * It consists of one {@link ILayer} for each {@link LayerType}.
      */
     public static class Cell {
-        private Layer[] layers;
+        private ILayer[] layers;
 
         public Cell() {
-            layers = new Layer[LAYER_COUNT];
+            layers = new ILayer[LAYER_COUNT];
         }
 
-        public Layer getLayer(LayerType type) {
+        public ILayer getLayer(LayerType type) {
             return layers[type.ordinal()];
         }
 
-        public void setLayer(LayerType type, Layer layer) {
+        public void setLayer(LayerType type, ILayer layer) {
             layers[type.ordinal()] = layer;
         }
 
-        public Layer[] getLayers() {
+        public ILayer[] getLayers() {
             return layers;
         }
 
-        public interface Layer {
+        public interface ILayer {
             Hexture getHexture();
         }
     }

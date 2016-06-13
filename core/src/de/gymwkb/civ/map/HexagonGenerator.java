@@ -5,12 +5,18 @@ import java.util.Random;
 import de.gymwkb.civ.map.HexMap.Cell;
 import de.gymwkb.civ.map.HexMap.LayerType;
 import de.gymwkb.civ.registry.Hexture;
+import de.gymwkb.civ.registry.Terrain;
 
 public class HexagonGenerator {
     public static final int SIZE = 100;
+    private HexMapLayout layout;
+    
+    public HexagonGenerator(HexMapLayout layout) {
+        this.layout = layout;
+    }
 
     public HexMap generateMap(int size, boolean branch) {
-        HexMap map = new HexMap();
+        HexMap map = new HexMap(layout);
 
         Hex startHex = new Hex(0, 0, 0);
         Cell startCell = generateCell();
