@@ -1,6 +1,8 @@
-package de.gymwkb.civ.registry;
+package de.gymwkb.civ.game;
 
 import de.gymwkb.civ.map.HexMap;
+import de.gymwkb.civ.registry.Hexture;
+import de.gymwkb.civ.registry.UnitType;
 
 public class Unit implements HexMap.Cell.ILayer {
     public final UnitType type;
