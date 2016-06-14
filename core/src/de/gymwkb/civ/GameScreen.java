@@ -10,27 +10,25 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import de.gymwkb.civ.game.HumanPlayerController;
 import de.gymwkb.civ.input.CameraController;
+import de.gymwkb.civ.input.HUD;
 import de.gymwkb.civ.input.MapController;
-import de.gymwkb.civ.map.HexMap;
 import de.gymwkb.civ.map.HexMapLayout;
 import de.gymwkb.civ.map.HexMapRenderer;
-import de.gymwkb.civ.map.HexagonGenerator;
 
 public class GameScreen implements Screen {
-    private final CivGame game;
     private OrthographicCamera camera;
     private Viewport viewport;
-    private HexagonGenerator generator;
-    private HexMap map;
+    private HumanPlayerController controller;
     private HexMapRenderer renderer;
     private TextureAtlas hextures;
     private HUD hud;
     
     public static final float WORLD_HEIGHT = 480f;
 
-    public GameScreen(CivGame game) {
-        this.game = game;
+    public GameScreen(HumanPlayerController controller) {
+        this.controller = controller;
 
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -42,18 +40,17 @@ public class GameScreen implements Screen {
         
         this.hud = new HUD();
         
-        hextures = game.assets.get("hextures/pack.atlas");
+        hextures = CivGame.instance.assets.get("hextures/pack.atlas");
         
         HexMapLayout layout = new HexMapLayout(HexMapLayout.FLAT, new Vector2(100f, 100f), new Vector2());
-        this.generator = new HexagonGenerator(layout);
-        this.map = generator.generateMap(HexagonGenerator.SIZE, false);
-        this.renderer = new HexMapRenderer(map, game.batch);
+        this.renderer = new HexMapRenderer(controller.getMap(), layout, CivGame.instance.batch);
         renderer.loadHextures(hextures);
         
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(hud);
         inputMultiplexer.addProcessor(new CameraController(camera));
-        inputMultiplexer.addProcessor(new MapController(map, layout, camera));
+        inputMultiplexer.addProcessor(new MapController(controller.getMap(), layout, camera));
+        inputMultiplexer.addProcessor(controller);
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
 

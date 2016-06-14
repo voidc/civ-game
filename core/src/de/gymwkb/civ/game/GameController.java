@@ -2,7 +2,11 @@ package de.gymwkb.civ.game;
 
 import com.badlogic.gdx.utils.Array;
 
+import de.gymwkb.civ.map.Hex;
 import de.gymwkb.civ.map.HexMap;
+import de.gymwkb.civ.map.HexagonGenerator;
+import de.gymwkb.civ.map.HexMap.LayerType;
+import de.gymwkb.civ.registry.UnitType;
 
 /**
  * Manages the common state of all PlayerControllers. (server role)
@@ -16,13 +20,36 @@ public class GameController {
     private int currentPlayer;
     private int turn;
     
+    public static final int PLAYER_COUNT = 2;
+    
     public GameController() {
-        // TODO Auto-generated constructor stub
+        HexagonGenerator gen = new HexagonGenerator();
+        this.map = gen.generateMap(HexagonGenerator.SIZE, false);
+        players = new Player[PLAYER_COUNT];
+        for(int i = 0; i < PLAYER_COUNT; i++) {
+            players[i] = new Player(i);
+        }
+    }
+    
+    public HexMap getMap() {
+        return map;
+    }
+    
+    public Player getPlayer(int id) {
+        return players[id];
+    }
+    
+    public void spawnUnit(int playerId, Hex position, UnitType type) {
+        if(playerId == currentPlayer) {
+            Unit u = new Unit(players[currentPlayer], type);
+            players[currentPlayer].addUnit(u);
+            map.getCell(position).setLayer(LayerType.UNIT, u);
+        }
     }
     
     /**
      * Implemented by classes which want to be notified if certain events occur.
-     * If the game is played over a network, this listeners can be used to synchronize server and client state.
+     * If the game is played over a network, these listeners can be used to synchronize server and client state.
      */
     public interface GameListener {
         

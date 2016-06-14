@@ -1,4 +1,4 @@
-package de.gymwkb.civ;
+package de.gymwkb.civ.input;
 
 import java.util.function.Consumer;
 
@@ -13,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import de.gymwkb.civ.CivGame;
 
 public class HUD extends Stage {
     private HorizontalGroup hgroup;

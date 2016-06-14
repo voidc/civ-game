@@ -24,10 +24,10 @@ public class HexMapRenderer {
 
     private final Vector2[] vertexBuffer;
 
-    public HexMapRenderer(HexMap map, Batch batch) {
+    public HexMapRenderer(HexMap map, HexMapLayout layout, Batch batch) {
         this.map = map;
         this.batch = batch;
-        this.layout = map.layout;
+        this.layout = layout;
         this.shapeRenderer = new ShapeRenderer();
         this.viewBounds = new Rectangle();
         

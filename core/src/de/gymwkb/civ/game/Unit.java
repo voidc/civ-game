@@ -6,10 +6,12 @@ import de.gymwkb.civ.registry.UnitType;
 
 public class Unit implements HexMap.Cell.ILayer {
     public final UnitType type;
+    private Player owner;
     private int health;
     private int ep;
     
-    public Unit(UnitType type) {
+    public Unit(Player owner, UnitType type) {
+        this.owner = owner;
         this.type = type;
     }
 

@@ -9,15 +9,13 @@ import de.gymwkb.civ.registry.Hexture;
  */
 public class HexMap {
     private final OrderedMap<Hex, Cell> cells;
-    public final HexMapLayout layout;
 
     public static final Hex[] NEIGHBORS = new Hex[] {new Hex(1, -1, 0), new Hex(0, 1, -1), new Hex(-1, 0, 1),
             new Hex(-1, 1, 0), new Hex(0, -1, 1), new Hex(1, 0, -1)};
     public static final int LAYER_COUNT = LayerType.values().length;
 
-    public HexMap(HexMapLayout layout) {
+    public HexMap() {
         this.cells = new OrderedMap<Hex, Cell>();
-        this.layout = layout;
     }
 
     /**
