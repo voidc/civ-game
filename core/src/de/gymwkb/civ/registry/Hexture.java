@@ -10,6 +10,7 @@ public enum Hexture {
     //FOREGROUND
     SELECTION,
     //TERRAIN
-    TERRAIN_DEFAULT
+    TERRAIN_DEFAULT,
     //UNITS
+    UNIT_DEFAULT
 }

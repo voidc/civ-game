@@ -2,10 +2,14 @@ package de.gymwkb.civ.map;
 
 import java.util.Random;
 
+import com.badlogic.gdx.math.MathUtils;
+
+import de.gymwkb.civ.game.Unit;
 import de.gymwkb.civ.map.HexMap.Cell;
 import de.gymwkb.civ.map.HexMap.LayerType;
 import de.gymwkb.civ.registry.Hexture;
 import de.gymwkb.civ.registry.Terrain;
+import de.gymwkb.civ.registry.UnitType;
 
 public class HexagonGenerator {
     public static final int SIZE = 100;
@@ -68,6 +72,9 @@ public class HexagonGenerator {
     public Cell generateCell() {
         Cell c = new Cell();
         c.setLayer(LayerType.TERRAIN, Terrain.DEFAULT);
+        if(MathUtils.randomBoolean(0.1f)) {
+            c.setLayer(LayerType.UNIT, new Unit(UnitType.TEST));
+        }
         return c;
     }
 

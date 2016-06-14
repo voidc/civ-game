@@ -1,6 +1,6 @@
 
 pack.png
-size: 512,256
+size: 1024,256
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -14,6 +14,13 @@ SELECTION
 TERRAIN_DEFAULT
   rotate: false
   xy: 204, 2
+  size: 200, 173
+  orig: 200, 173
+  offset: 0, 0
+  index: -1
+UNIT_DEFAULT
+  rotate: false
+  xy: 406, 2
   size: 200, 173
   orig: 200, 173
   offset: 0, 0
