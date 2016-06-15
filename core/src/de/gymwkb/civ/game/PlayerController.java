@@ -9,13 +9,15 @@ import de.gymwkb.civ.map.HexMap;
 public abstract class PlayerController {
     protected GameController game;
     protected Player player;
+    protected HexMap map;
     
     public PlayerController(GameController game, int playerId) {
         this.game = game;
         this.player = game.getPlayer(playerId);
+        map = game.getMap();
     }
     
     public HexMap getMap() {
-        return game.getMap();
+        return map;
     }
 }

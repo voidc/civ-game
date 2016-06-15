@@ -2,6 +2,7 @@ package de.gymwkb.civ.map;
 
 import com.badlogic.gdx.utils.OrderedMap;
 
+import de.gymwkb.civ.game.Unit;
 import de.gymwkb.civ.registry.Hexture;
 
 /**
@@ -31,6 +32,13 @@ public class HexMap {
      */
     public Cell getCell(Hex hex) {
         return cells.get(hex);
+    }
+    
+    public Unit getUnit(Hex hex) {
+        Cell.ILayer l = getCell(hex).getLayer(LayerType.UNIT);
+        if(l != null && l instanceof Unit) {
+            return (Unit) l;
+        } else return null;
     }
 
     public boolean contains(Hex hex) {

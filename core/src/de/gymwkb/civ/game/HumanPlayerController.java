@@ -1,66 +1,42 @@
 package de.gymwkb.civ.game;
 
-import com.badlogic.gdx.InputProcessor;
-
 import de.gymwkb.civ.map.Hex;
+import de.gymwkb.civ.map.HexMap.Cell;
+import de.gymwkb.civ.map.HexMap.LayerType;
+import de.gymwkb.civ.map.Selection;
 import de.gymwkb.civ.registry.UnitType;
 
 /**
  * Processes inputs before sending them to the game controller.
  */
-public class HumanPlayerController extends PlayerController implements InputProcessor {
+public class HumanPlayerController extends PlayerController {
+    private Hex selection;
     
     public HumanPlayerController(GameController game, int playerId) {
         super(game, playerId);
         game.spawnUnit(player.id, new Hex(0, 0, 0), UnitType.TEST);
     }
-
-    @Override
-    public boolean keyDown(int keycode) {
-        // TODO Auto-generated method stub
-        return false;
+    
+    public Hex getSelectedHex() {
+        return selection;
     }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        // TODO Auto-generated method stub
-        return false;
+    
+    public void setSelectedHex(Hex hex) {
+        if(hex != null && !hex.equals(selection) && map.contains(hex)) {
+            if(selection == null) {
+                map.getCell(hex).setLayer(LayerType.FOREGROUND, new Selection());
+            } else {           
+                Cell last = map.getCell(selection);
+                map.getCell(hex).setLayer(LayerType.FOREGROUND, last.getLayer(LayerType.FOREGROUND));
+                last.setLayer(LayerType.FOREGROUND, null);
+            }
+            selection = hex;
+        }
     }
-
-    @Override
-    public boolean keyTyped(char character) {
-        // TODO Auto-generated method stub
-        return false;
+    
+    public void onHexClicked(Hex hex) {
+        if(hex != null && map.contains(hex) && map.getUnit(hex) != null)
+            setSelectedHex(hex);
     }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(int amount) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
+    
 }

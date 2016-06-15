@@ -13,14 +13,13 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import de.gymwkb.civ.game.HumanPlayerController;
 import de.gymwkb.civ.input.CameraController;
 import de.gymwkb.civ.input.HUD;
-import de.gymwkb.civ.input.MapController;
+import de.gymwkb.civ.input.MapInputProcessor;
 import de.gymwkb.civ.map.HexMapLayout;
 import de.gymwkb.civ.map.HexMapRenderer;
 
 public class GameScreen implements Screen {
     private OrthographicCamera camera;
     private Viewport viewport;
-    private HumanPlayerController controller;
     private HexMapRenderer renderer;
     private TextureAtlas hextures;
     private HUD hud;
@@ -28,8 +27,6 @@ public class GameScreen implements Screen {
     public static final float WORLD_HEIGHT = 480f;
 
     public GameScreen(HumanPlayerController controller) {
-        this.controller = controller;
-
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
 
@@ -49,8 +46,7 @@ public class GameScreen implements Screen {
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(hud);
         inputMultiplexer.addProcessor(new CameraController(camera));
-        inputMultiplexer.addProcessor(new MapController(controller.getMap(), layout, camera));
-        inputMultiplexer.addProcessor(controller);
+        inputMultiplexer.addProcessor(new MapInputProcessor(controller, layout, camera));
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
