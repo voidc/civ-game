@@ -41,4 +41,9 @@ public class Hex {
             return false;
         return true;
     }
+    
+    @Override
+    public String toString() {
+        return String.format("(%d; %d; %d)", q, r, s);
+    }
 }

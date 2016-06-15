@@ -4,23 +4,37 @@ size: 1024,256
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-SELECTION
+SELECTION_ATTACK
   rotate: false
   xy: 2, 2
   size: 200, 173
   orig: 200, 173
   offset: 0, 0
   index: -1
-TERRAIN_DEFAULT
+SELECTION_MOVE
   rotate: false
   xy: 204, 2
   size: 200, 173
   orig: 200, 173
   offset: 0, 0
   index: -1
-UNIT_DEFAULT
+SELECTION_UNIT
   rotate: false
   xy: 406, 2
+  size: 200, 173
+  orig: 200, 173
+  offset: 0, 0
+  index: -1
+TERRAIN_DEFAULT
+  rotate: false
+  xy: 608, 2
+  size: 200, 173
+  orig: 200, 173
+  offset: 0, 0
+  index: -1
+UNIT_DEFAULT
+  rotate: false
+  xy: 810, 2
   size: 200, 173
   orig: 200, 173
   offset: 0, 0

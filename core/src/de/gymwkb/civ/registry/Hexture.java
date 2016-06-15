@@ -8,7 +8,9 @@ package de.gymwkb.civ.registry;
  */
 public enum Hexture {
     //FOREGROUND
-    SELECTION,
+    SELECTION_UNIT,
+    SELECTION_MOVE,
+    SELECTION_ATTACK,
     //TERRAIN
     TERRAIN_DEFAULT,
     //UNITS
