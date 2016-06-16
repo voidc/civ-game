@@ -1,6 +1,7 @@
 package de.gymwkb.civ.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 
 import de.gymwkb.civ.map.Hex;
@@ -30,15 +31,15 @@ public class HumanPlayerController extends PlayerController {
     }
     
     public void selectUnit(Hex hex) {
-        if(hex == null) {
+        if(hex == null || hex.equals(selectedUnit)) {
             map.getCell(selectedUnit).setLayer(LayerType.FOREGROUND, null);
             selectedUnit = null;
-            map.getCell(secondaryHex).setLayer(LayerType.FOREGROUND, null);
-            secondaryHex = null;
-        } else if(hex != null && !hex.equals(selectedUnit)) {
+            onHexHover(null);
+        } else {
             map.getCell(hex).setLayer(LayerType.FOREGROUND, SELECTION_UNIT);
             if(selectedUnit != null) {
                 map.getCell(selectedUnit).setLayer(LayerType.FOREGROUND, null);
+                secondaryHex = null;
             }
             selectedUnit = hex;
         }
@@ -48,7 +49,16 @@ public class HumanPlayerController extends PlayerController {
         if(hex == null || !map.contains(hex))
             return;
         
-        if(map.getUnit(hex) != null) {
+        if(button == Buttons.RIGHT && hex.equals(secondaryHex)) {
+            if(map.getUnit(hex) != null) {
+                //attack
+            } else {
+                //move
+            }
+            return;
+        }
+        
+        if(button == Buttons.LEFT && map.getUnit(hex) != null) {
             selectUnit(hex);
         } else if(Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) {
             game.spawnUnit(player.id, hex, UnitType.TEST);
@@ -58,15 +68,15 @@ public class HumanPlayerController extends PlayerController {
     }
     
     public void onHexHover(Hex hex) {
-        if(hex == null || !map.contains(hex))
-            return;
+        if(secondaryHex != null) {
+            map.getCell(secondaryHex).setLayer(LayerType.FOREGROUND, null);
+            secondaryHex = null;
+        }
         
-        if(selectedUnit != null && !hex.equals(selectedUnit)) {
+        if(hex != null && map.contains(hex) &&
+                selectedUnit != null && !hex.equals(selectedUnit)) {
             ILayer sel = map.getUnit(hex) == null ? SELECTION_MOVE : SELECTION_ATTACK;
             map.getCell(hex).setLayer(LayerType.FOREGROUND, sel);
-            if(secondaryHex != null) {
-                map.getCell(secondaryHex).setLayer(LayerType.FOREGROUND, null);
-            }
             secondaryHex = hex;
         }
     }
