@@ -15,13 +15,17 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import de.gymwkb.civ.CivGame;
+import de.gymwkb.civ.game.HumanPlayerController;
 
 public class HUD extends Stage {
     private HorizontalGroup hgroup;
     private Skin skin;
+    private HumanPlayerController humanPlayer;
     
-    public HUD() {
+    public HUD(HumanPlayerController controller) {
         super(new ScreenViewport());
+        this.humanPlayer = controller;
+        
         skin = CivGame.instance.assets.get("skin/uiskin.json");
         hgroup = new HorizontalGroup();
         hgroup.align(Align.topRight);

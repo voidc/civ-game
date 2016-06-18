@@ -29,6 +29,22 @@ public class GameController {
         for(int i = 0; i < PLAYER_COUNT; i++) {
             players[i] = new Player(i);
         }
+        
+        turn = 0;
+    }
+    
+    public void finishTurn(int playerId) {
+        if (currentPlayer != playerId) {
+            return;
+        }
+        
+        currentPlayer = (currentPlayer + 1) % players.length;
+        
+        if (currentPlayer == 0) {
+            turn++;
+        }
+        
+        listeners.forEach(listener -> listener.onTurn(currentPlayer));
     }
     
     public HexMap getMap() {
@@ -52,6 +68,6 @@ public class GameController {
      * If the game is played over a network, these listeners can be used to synchronize server and client state.
      */
     public interface GameListener {
-        
+        void onTurn(int playerId);
     }
 }

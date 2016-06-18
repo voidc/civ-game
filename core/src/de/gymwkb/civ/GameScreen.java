@@ -35,7 +35,7 @@ public class GameScreen implements Screen {
         this.camera.update();
         this.viewport = new ScreenViewport(camera);
         
-        this.hud = new HUD();
+        this.hud = new HUD(controller);
         
         hextures = CivGame.instance.assets.get("hextures/pack.atlas");
         
