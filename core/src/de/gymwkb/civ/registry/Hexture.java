@@ -1,5 +1,9 @@
 package de.gymwkb.civ.registry;
 
+import com.badlogic.gdx.graphics.Color;
+
+import de.gymwkb.civ.map.HexMap.Cell.ILayer;
+
 /**
  * This enumeration contains all available hextures.
  * A hexture is a hexagonal texture which is displayed on the map.
@@ -8,11 +12,30 @@ package de.gymwkb.civ.registry;
  */
 public enum Hexture {
     //FOREGROUND
-    SELECTION_UNIT,
-    SELECTION_MOVE,
-    SELECTION_ATTACK,
+    SELECTION_BASE,
     //TERRAIN
-    TERRAIN_DEFAULT,
+    TERRAIN_GRASS,
+    TERRAIN_FOREST,
+    TERRAIN_ROCKS,
+    TERRAIN_SAND,
+    TERRAIN_DESERT,
+    TERRAIN_STONE,
     //UNITS
-    UNIT_DEFAULT
+    UNIT_BASE;
+    
+    public ILayer createLayer(Color tint) {
+        return new ILayer() {
+
+            @Override
+            public Hexture getHexture() {
+                return Hexture.this;
+            }
+            
+            @Override
+            public Color getTint() {
+                return tint;
+            }
+            
+        };
+    }
 }

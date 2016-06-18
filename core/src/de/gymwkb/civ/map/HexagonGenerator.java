@@ -8,6 +8,7 @@ import de.gymwkb.civ.registry.Terrain;
 
 public class HexagonGenerator {
     public static final int SIZE = 100;
+    private Random random = new Random();
     
     public HexagonGenerator() {
     }
@@ -19,7 +20,6 @@ public class HexagonGenerator {
         Cell startCell = generateCell();
         map.addCell(startHex, startCell);
 
-        Random random = new Random();
 
         for (int i = 1; i < size; i++) {
             for (int tries = 0; tries < i; tries++) {
@@ -64,7 +64,8 @@ public class HexagonGenerator {
 
     public Cell generateCell() {
         Cell c = new Cell();
-        c.setLayer(LayerType.TERRAIN, Terrain.DEFAULT);
+        Terrain t = Terrain.values()[random.nextInt(Terrain.values().length)];
+        c.setLayer(LayerType.TERRAIN, t);
         return c;
     }
 

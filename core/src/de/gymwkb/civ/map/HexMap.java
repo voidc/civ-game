@@ -1,5 +1,6 @@
 package de.gymwkb.civ.map;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.OrderedMap;
 
 import de.gymwkb.civ.game.Unit;
@@ -82,9 +83,12 @@ public class HexMap {
 
         public interface ILayer {
             Hexture getHexture();
+            default Color getTint() {
+                return Color.WHITE;
+            }
         }
     }
-
+  
     public enum LayerType {
         TERRAIN, UNIT, FOREGROUND
     }

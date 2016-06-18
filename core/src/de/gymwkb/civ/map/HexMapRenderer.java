@@ -1,7 +1,7 @@
 package de.gymwkb.civ.map;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -16,7 +16,7 @@ import de.gymwkb.civ.registry.Hexture;
 
 public class HexMapRenderer {
     private HexMap map;
-    private Batch batch;
+    private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
     private HexMapLayout layout;
     private Rectangle viewBounds;
@@ -24,7 +24,7 @@ public class HexMapRenderer {
 
     private final Vector2[] vertexBuffer;
 
-    public HexMapRenderer(HexMap map, HexMapLayout layout, Batch batch) {
+    public HexMapRenderer(HexMap map, HexMapLayout layout, SpriteBatch batch) {
         this.map = map;
         this.batch = batch;
         this.layout = layout;
@@ -107,6 +107,7 @@ public class HexMapRenderer {
     private void drawLayer(Hex hex, Cell.ILayer layer) {
         if(layer == null || layer.getHexture() == null)
             return;
+        batch.setColor(layer.getTint());
         TextureRegion texture = getCachedHexture(layer.getHexture());
         Rectangle bounds = layout.getTextureBounds(hex);
         batch.draw(texture, bounds.x, bounds.y, bounds.width, bounds.height);

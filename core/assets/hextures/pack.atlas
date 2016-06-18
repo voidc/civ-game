@@ -1,41 +1,62 @@
 
 pack.png
-size: 1024,256
+size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-SELECTION_ATTACK
+SELECTION_BASE
+  rotate: false
+  xy: 2, 566
+  size: 240, 280
+  orig: 240, 280
+  offset: 0, 0
+  index: -1
+TERRAIN_DESERT
+  rotate: false
+  xy: 2, 284
+  size: 240, 280
+  orig: 240, 280
+  offset: 0, 0
+  index: -1
+TERRAIN_FOREST
+  rotate: false
+  xy: 244, 566
+  size: 240, 280
+  orig: 240, 280
+  offset: 0, 0
+  index: -1
+TERRAIN_GRASS
   rotate: false
   xy: 2, 2
-  size: 200, 173
-  orig: 200, 173
+  size: 240, 280
+  orig: 240, 280
   offset: 0, 0
   index: -1
-SELECTION_MOVE
+TERRAIN_ROCKS
   rotate: false
-  xy: 204, 2
-  size: 200, 173
-  orig: 200, 173
+  xy: 244, 284
+  size: 240, 280
+  orig: 240, 280
   offset: 0, 0
   index: -1
-SELECTION_UNIT
+TERRAIN_SAND
   rotate: false
-  xy: 406, 2
-  size: 200, 173
-  orig: 200, 173
+  xy: 486, 566
+  size: 240, 280
+  orig: 240, 280
   offset: 0, 0
   index: -1
-TERRAIN_DEFAULT
+TERRAIN_STONE
   rotate: false
-  xy: 608, 2
-  size: 200, 173
-  orig: 200, 173
+  xy: 244, 2
+  size: 240, 280
+  orig: 240, 280
   offset: 0, 0
   index: -1
-UNIT_DEFAULT
+UNIT_BASE
   rotate: false
-  xy: 810, 2
-  size: 200, 173
-  orig: 200, 173
+  xy: 486, 284
+  size: 240, 280
+  orig: 240, 280
   offset: 0, 0
   index: -1

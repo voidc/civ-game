@@ -3,6 +3,7 @@ package de.gymwkb.civ.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 
 import de.gymwkb.civ.map.Hex;
 import de.gymwkb.civ.map.HexMap.Cell.ILayer;
@@ -17,9 +18,9 @@ public class HumanPlayerController extends PlayerController {
     private Hex selectedUnit;
     private Hex secondaryHex;
     
-    public static final ILayer SELECTION_UNIT = () -> Hexture.SELECTION_UNIT;
-    public static final ILayer SELECTION_MOVE = () -> Hexture.SELECTION_MOVE;
-    public static final ILayer SELECTION_ATTACK = () -> Hexture.SELECTION_ATTACK;
+    public static final ILayer SELECTION_UNIT = Hexture.SELECTION_BASE.createLayer(new Color(0x00b2aeff));
+    public static final ILayer SELECTION_MOVE = Hexture.SELECTION_BASE.createLayer(new Color(0x718000ff));
+    public static final ILayer SELECTION_ATTACK = Hexture.SELECTION_BASE.createLayer(new Color(0xb22300ff));
     
     public HumanPlayerController(GameController game, int playerId) {
         super(game, playerId);

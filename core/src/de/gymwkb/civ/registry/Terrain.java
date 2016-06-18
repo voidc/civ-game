@@ -3,7 +3,12 @@ package de.gymwkb.civ.registry;
 import de.gymwkb.civ.map.HexMap;
 
 public enum Terrain implements HexMap.Cell.ILayer {
-    DEFAULT(Hexture.TERRAIN_DEFAULT);
+    GRASS(Hexture.TERRAIN_GRASS),
+    FOREST(Hexture.TERRAIN_FOREST),
+    ROCKS(Hexture.TERRAIN_ROCKS),
+    SAND(Hexture.TERRAIN_SAND),
+    DESERT(Hexture.TERRAIN_DESERT),
+    STONE(Hexture.TERRAIN_STONE);
     
     private Hexture hexture;
     

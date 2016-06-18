@@ -39,7 +39,7 @@ public class GameScreen implements Screen {
         
         hextures = CivGame.instance.assets.get("hextures/pack.atlas");
         
-        HexMapLayout layout = new HexMapLayout(HexMapLayout.FLAT, new Vector2(100f, 100f), new Vector2());
+        HexMapLayout layout = new HexMapLayout(HexMapLayout.POINTY, new Vector2(100f, 100f), new Vector2());
         this.renderer = new HexMapRenderer(controller.getMap(), layout, CivGame.instance.batch);
         renderer.loadHextures(hextures);
         

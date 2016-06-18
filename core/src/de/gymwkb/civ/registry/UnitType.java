@@ -1,7 +1,7 @@
 package de.gymwkb.civ.registry;
 
 public enum UnitType {
-    TEST(Hexture.UNIT_DEFAULT, 1, 100, 10, 10, 1);
+    TEST(Hexture.UNIT_BASE, 1, 100, 10, 10, 1);
     
     private UnitType(Hexture hexture, int movementRange, int maxHealth, int strength, int defence, int attackRange) {
         this.hexture = hexture;
