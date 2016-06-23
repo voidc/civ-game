@@ -24,7 +24,7 @@ public class HumanPlayerController extends PlayerController {
     
     public HumanPlayerController(GameController game, int playerId) {
         super(game, playerId);
-        game.spawnUnit(player.id, new Hex(0, 0, 0), UnitType.TEST);
+        //game.spawnUnit(player.id, new Hex(0, 0, 0), UnitType.TEST);
     }
     
     public Hex getSelectedUnit() {
@@ -52,9 +52,9 @@ public class HumanPlayerController extends PlayerController {
         
         if(button == Buttons.RIGHT && hex.equals(secondaryHex)) {
             if(map.getUnit(hex) != null) {
-                //attack
+                game.attack(player.id, selectedUnit, secondaryHex);
             } else {
-                //move
+                game.move(player.id, selectedUnit, secondaryHex);
             }
             return;
         }

@@ -1,5 +1,6 @@
 package de.gymwkb.civ.game;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 
 import de.gymwkb.civ.map.Hex;
@@ -33,6 +34,48 @@ public class GameController {
         turn = 0;
     }
     
+    public void move(int playerId, Hex unitHex, Hex targetHex) {
+        if (currentPlayer != playerId) {
+            System.out.println("Wrong turn!");
+            return;
+        }
+        
+        Unit unit = map.getUnit(unitHex);
+        if(unit == null || unit.getOwner().id != playerId) {
+            System.out.println("No unit!");
+            return;
+        }
+        
+        Unit target = map.getUnit(targetHex);
+        if(target != null) {
+            System.out.println("Hex occupied!");
+            return;
+        }
+        
+        //check if target is in movement range
+        
+        map.getCell(unitHex).setLayer(LayerType.UNIT, null);
+        map.getCell(targetHex).setLayer(LayerType.UNIT, unit);
+    }
+    
+    public void attack(int playerId, Hex unitHex, Hex targetHex) {
+        if (currentPlayer != playerId)
+            return;
+        
+        Unit unit = map.getUnit(unitHex);
+        if(unit == null || unit.getOwner().id != playerId || unit.type.strength == 0)
+            return;
+        
+        Unit target = map.getUnit(targetHex);
+        if(target == null || target.getOwner().id == playerId)
+            return;
+        
+        //check if target is in attack range
+        
+        float attackDamage = (unit.type.strength / target.type.defence) * unit.ep * (unit.health / unit.type.maxHealth);
+        target.health = Math.max(0, target.health - attackDamage);
+    }
+    
     public void finishTurn(int playerId) {
         if (currentPlayer != playerId) {
             return;
@@ -57,8 +100,9 @@ public class GameController {
     
     public void spawnUnit(int playerId, Hex position, UnitType type) {
         if(playerId == currentPlayer) {
-            Unit u = new Unit(players[currentPlayer], type);
-            players[currentPlayer].addUnit(u);
+            Unit u = new Unit(new Player(MathUtils.random(5)), type);
+            //Unit u = new Unit(players[currentPlayer], type);
+            //players[currenvtPlayer].addUnit(u);
             map.getCell(position).setLayer(LayerType.UNIT, u);
         }
     }
@@ -69,5 +113,6 @@ public class GameController {
      */
     public interface GameListener {
         void onTurn(int playerId);
+        void onAttack(Hex attacker, Hex target);
     }
 }

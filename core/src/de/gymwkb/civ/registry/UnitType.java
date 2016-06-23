@@ -21,9 +21,9 @@ public enum UnitType {
 
     public final Hexture hexture;
     public final int movementRange;
-    public final int maxHealth;
-    public final int strength;
-    public final int defence;
+    public final float maxHealth;
+    public final float strength;
+    public final float defence;
     public final int attackRange;
     public final int viewRange;
 }
