@@ -28,7 +28,7 @@ public class Unit implements HexMap.Cell.ILayer {
         this.owner = owner;
         this.type = type;
         this.health = type.maxHealth;
-        this.ep = 1f;
+        this.ep = 0f;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class Unit implements HexMap.Cell.ILayer {
     }
     
     public int getLevel() {
-        return MathUtils.ceil(ep / EP_PER_LEVEL);
+        return MathUtils.floor(ep / EP_PER_LEVEL) + 1;
     }
     
     public float getLevelProgress() {

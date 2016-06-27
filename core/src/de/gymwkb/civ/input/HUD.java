@@ -76,15 +76,20 @@ public class HUD extends Stage implements PlayerListener {
         addActor(unitWindow);
         
         unitPropertyLabels = new Label[7];
-        unitWindow.left().top();
         unitWindow.defaults().pad(8f);
         for(int i = 0; i < 7; i++) {
            unitPropertyLabels[i] = new Label("", skin, "value");
-           unitWindow.add(unitPropertyLabels[i]);
-           if(i == 0 || i == 1 || i == 3) {
-               unitWindow.row();
-           }
         }
+        unitWindow.add(unitPropertyLabels[0]).colspan(6);
+        unitWindow.row();
+        unitWindow.add(unitPropertyLabels[1]).colspan(6);
+        unitWindow.row();
+        unitWindow.add(unitPropertyLabels[2]).colspan(3);
+        unitWindow.add(unitPropertyLabels[3]).colspan(3);
+        unitWindow.row();
+        unitWindow.add(unitPropertyLabels[4]).colspan(2);
+        unitWindow.add(unitPropertyLabels[5]).colspan(2);
+        unitWindow.add(unitPropertyLabels[6]).colspan(2);
     }
     
     private void updateResources() {
