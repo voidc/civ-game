@@ -45,6 +45,10 @@ public class Unit implements HexMap.Cell.ILayer {
         return owner;
     }
     
+    public float getHealth() {
+        return health;
+    }
+    
     public float getHealthPercentage() {
         return MathUtils.clamp(health / type.maxHealth, 0, 1);
     }

@@ -2,28 +2,23 @@ package de.gymwkb.civ.input;
 
 import java.util.function.Consumer;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import de.gymwkb.civ.CivGame;
 import de.gymwkb.civ.GameScreen;
 import de.gymwkb.civ.game.HumanPlayerController;
-import de.gymwkb.civ.game.Unit;
 import de.gymwkb.civ.game.HumanPlayerController.PlayerListener;
+import de.gymwkb.civ.game.Unit;
 import de.gymwkb.civ.registry.Resource;
 
 public class HUD extends Stage implements PlayerListener {
@@ -31,7 +26,6 @@ public class HUD extends Stage implements PlayerListener {
     private HumanPlayerController humanPlayer;
     
     private Table hudContainer;
-    private HorizontalGroup topBar;
     private Label[] resourceLabels;
     
     private Window unitWindow;
@@ -70,7 +64,7 @@ public class HUD extends Stage implements PlayerListener {
         }
         
         unitWindow = new Window("Einheit", skin);
-        unitWindow.setSize(300f, 250f);
+        unitWindow.setSize(350f, 250f);
         unitWindow.setPosition(0, 0);
         unitWindow.setVisible(false);
         addActor(unitWindow);
@@ -102,7 +96,8 @@ public class HUD extends Stage implements PlayerListener {
     
     private void showUnitWindow(Unit unit) {
         unitWindow.getTitleLabel().setText(unit.type.name);
-        unitPropertyLabels[0].setText((unit.getHealthPercentage() * 100f) + "%");
+        unitPropertyLabels[0].setText(MathUtils.floor(unit.getHealth()) + "/" + 
+                MathUtils.floor(unit.type.maxHealth) + " (" + (unit.getHealthPercentage() * 100f) + "%)");
         unitPropertyLabels[1].setText("Level " + unit.getLevel() + " (" + (unit.getLevelProgress() * 100) + "%)");
         unitPropertyLabels[2].setText("STR " + unit.type.strength);
         unitPropertyLabels[3].setText("DEF " + unit.type.defence);
