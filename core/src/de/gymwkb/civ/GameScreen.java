@@ -24,14 +24,13 @@ public class GameScreen implements Screen {
     private TextureAtlas hextures;
     private HUD hud;
     
-    public static final float WORLD_HEIGHT = 480f;
+    public static float GAME_HEIGHT = 720f;
+    public static float GAME_WIDTH = 1280f;
 
     public GameScreen(HumanPlayerController controller) {
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
-
+        GAME_WIDTH = (Gdx.graphics.getWidth() / Gdx.graphics.getHeight()) * GAME_HEIGHT;
         this.camera = new OrthographicCamera();
-        this.camera.setToOrtho(false, (w / h) * WORLD_HEIGHT, WORLD_HEIGHT);
+        this.camera.setToOrtho(false, GAME_HEIGHT, GAME_WIDTH);
         this.camera.update();
         this.viewport = new ScreenViewport(camera);
         
@@ -65,7 +64,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-
+        hud.show();
     }
 
     @Override

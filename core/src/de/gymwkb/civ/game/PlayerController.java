@@ -20,4 +20,8 @@ public abstract class PlayerController {
     public HexMap getMap() {
         return map;
     }
+    
+    public Player getPlayer() {
+        return player;
+    }
 }

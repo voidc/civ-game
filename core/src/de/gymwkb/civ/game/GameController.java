@@ -72,8 +72,9 @@ public class GameController {
         
         //check if target is in attack range
         
-        float attackDamage = (unit.type.strength / target.type.defence) * unit.ep * (unit.health / unit.type.maxHealth);
-        target.health = Math.max(0, target.health - attackDamage);
+        float attackDamage = (unit.type.strength / target.type.defence) * unit.getLevel() * unit.getHealthPercentage();
+        System.out.println(attackDamage);
+        target.modHealth(-attackDamage);
     }
     
     public void finishTurn(int playerId) {

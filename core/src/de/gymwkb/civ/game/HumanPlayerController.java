@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.utils.Array;
 
 import de.gymwkb.civ.map.Hex;
 import de.gymwkb.civ.map.HexMap.Cell.ILayer;
@@ -17,6 +18,7 @@ import de.gymwkb.civ.registry.UnitType;
 public class HumanPlayerController extends PlayerController {
     private Hex selectedUnit;
     private Hex secondaryHex;
+    private Array<PlayerListener> listeners;
     
     public static final ILayer SELECTION_UNIT = Hexture.SELECTION_BASE.createLayer(new Color(0x00b2aeff));
     public static final ILayer SELECTION_MOVE = Hexture.SELECTION_BASE.createLayer(new Color(0x718000ff));
@@ -24,7 +26,11 @@ public class HumanPlayerController extends PlayerController {
     
     public HumanPlayerController(GameController game, int playerId) {
         super(game, playerId);
-        //game.spawnUnit(player.id, new Hex(0, 0, 0), UnitType.TEST);
+        listeners = new Array<PlayerListener>();
+    }
+    
+    public void registerListener(PlayerListener l) {
+        listeners.add(l);
     }
     
     public Hex getSelectedUnit() {
@@ -36,6 +42,7 @@ public class HumanPlayerController extends PlayerController {
             map.getCell(selectedUnit).setLayer(LayerType.FOREGROUND, null);
             selectedUnit = null;
             onHexHover(null);
+            listeners.forEach(listener -> listener.onUnitSelected(null));
         } else {
             map.getCell(hex).setLayer(LayerType.FOREGROUND, SELECTION_UNIT);
             if(selectedUnit != null) {
@@ -43,6 +50,7 @@ public class HumanPlayerController extends PlayerController {
                 secondaryHex = null;
             }
             selectedUnit = hex;
+            listeners.forEach(listener -> listener.onUnitSelected(map.getUnit(selectedUnit)));
         }
     }
     
@@ -61,8 +69,12 @@ public class HumanPlayerController extends PlayerController {
         
         if(button == Buttons.LEFT && map.getUnit(hex) != null) {
             selectUnit(hex);
-        } else if(Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) {
+        } else if(Gdx.input.isKeyPressed(Keys.NUM_1)) {
             game.spawnUnit(player.id, hex, UnitType.TEST);
+        } else if(Gdx.input.isKeyPressed(Keys.NUM_2)) {
+            game.spawnUnit(player.id, hex, UnitType.ARCHER);
+        } else if(Gdx.input.isKeyPressed(Keys.NUM_3)) {
+            game.spawnUnit(player.id, hex, UnitType.PIKEMAN);
         } else if(selectedUnit != null) {
             selectUnit(null);
         }
@@ -80,6 +92,10 @@ public class HumanPlayerController extends PlayerController {
             map.getCell(hex).setLayer(LayerType.FOREGROUND, sel);
             secondaryHex = hex;
         }
+    }
+    
+    public interface PlayerListener {
+        void onUnitSelected(Unit unit);
     }
     
 }
