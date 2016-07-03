@@ -12,6 +12,8 @@ public enum Terrain implements HexMap.Cell.ILayer {
     
     private Hexture hexture;
     
+    public static final int COUNT = Terrain.values().length;
+    
     private Terrain(Hexture hexture) {
         this.hexture = hexture;
     }

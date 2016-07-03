@@ -9,7 +9,7 @@ import de.gymwkb.civ.registry.UnitType;
 
 public class Unit implements HexMap.Cell.ILayer {
     public final UnitType type;
-    private Player owner;
+    private int ownerId;
     private float health;
     private float ep;
     
@@ -24,8 +24,8 @@ public class Unit implements HexMap.Cell.ILayer {
             new Color(0xff00ffff)
     };
     
-    public Unit(Player owner, UnitType type) {
-        this.owner = owner;
+    public Unit(int ownerId, UnitType type) {
+        this.ownerId = ownerId;
         this.type = type;
         this.health = type.maxHealth;
         this.ep = 0f;
@@ -38,11 +38,11 @@ public class Unit implements HexMap.Cell.ILayer {
     
     @Override
     public Color getTint() {
-        return COLORS[owner.id % COLORS.length];
+        return COLORS[ownerId % COLORS.length];
     }
     
-    public Player getOwner() {
-        return owner;
+    public int getOwnerId() {
+        return ownerId;
     }
     
     public float getHealth() {

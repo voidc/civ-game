@@ -23,6 +23,8 @@ public enum Hexture {
     //UNITS
     UNIT_BASE;
     
+    public static final int COUNT = Hexture.values().length;
+    
     public ILayer createLayer(Color tint) {
         return new ILayer() {
 

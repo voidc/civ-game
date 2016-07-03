@@ -16,6 +16,7 @@ import de.gymwkb.civ.registry.UnitType;
  */
 public class GameController {
     private Array<GameListener> listeners;
+    private Pathfinder pathfinder;
     private HexMap map;
     private Player[] players;
     private int currentPlayer;
@@ -26,55 +27,20 @@ public class GameController {
     public GameController() {
         HexagonGenerator gen = new HexagonGenerator();
         this.map = gen.generateMap(HexagonGenerator.SIZE, false);
+        
         players = new Player[PLAYER_COUNT];
         for(int i = 0; i < PLAYER_COUNT; i++) {
             players[i] = new Player(i);
         }
         
+        pathfinder = new DFSPathfinder(map);
+        listeners = new Array<>();
+        
         turn = 0;
     }
     
-    public void move(int playerId, Hex unitHex, Hex targetHex) {
-        if (currentPlayer != playerId) {
-            System.out.println("Wrong turn!");
-            return;
-        }
-        
-        Unit unit = map.getUnit(unitHex);
-        if(unit == null || unit.getOwner().id != playerId) {
-            System.out.println("No unit!");
-            return;
-        }
-        
-        Unit target = map.getUnit(targetHex);
-        if(target != null) {
-            System.out.println("Hex occupied!");
-            return;
-        }
-        
-        //check if target is in movement range
-        
-        map.getCell(unitHex).setLayer(LayerType.UNIT, null);
-        map.getCell(targetHex).setLayer(LayerType.UNIT, unit);
-    }
-    
-    public void attack(int playerId, Hex unitHex, Hex targetHex) {
-        if (currentPlayer != playerId)
-            return;
-        
-        Unit unit = map.getUnit(unitHex);
-        if(unit == null || unit.getOwner().id != playerId || unit.type.strength == 0)
-            return;
-        
-        Unit target = map.getUnit(targetHex);
-        if(target == null || target.getOwner().id == playerId)
-            return;
-        
-        //check if target is in attack range
-        
-        float attackDamage = (unit.type.strength / target.type.defence) * unit.getLevel() * unit.getHealthPercentage();
-        System.out.println(attackDamage);
-        target.modHealth(-attackDamage);
+    public void registerListener(GameListener listener) {
+        listeners.add(listener);
     }
     
     public void finishTurn(int playerId) {
@@ -90,7 +56,82 @@ public class GameController {
         
         listeners.forEach(listener -> listener.onTurn(currentPlayer));
     }
+
+    public void move(int playerId, Hex unitHex, Hex targetHex) {
+        if (currentPlayer != playerId) {
+            System.out.println("Wrong turn!");
+            return;
+        }
+        
+        Unit unit = map.getUnit(unitHex);
+        if(unit == null || unit.getOwnerId() != playerId) {
+            System.out.println("No unit!");
+            return;
+        }
+        
+        Unit target = map.getUnit(targetHex);
+        if(target != null) {
+            System.out.println("Hex occupied!");
+            return;
+        }
+        
+        //check if target is in movement range
+        
+        map.getCell(unitHex).setLayer(LayerType.UNIT, null);
+        map.getCell(targetHex).setLayer(LayerType.UNIT, unit);
+        listeners.forEach(listener -> listener.onMove(unitHex, targetHex));
+    }
     
+    public void attack(int playerId, Hex unitHex, Hex targetHex) {
+        if (currentPlayer != playerId)
+            return;
+        
+        Unit unit = map.getUnit(unitHex);
+        if(unit == null || unit.getOwnerId() != playerId || unit.type.strength == 0)
+            return;
+        
+        Unit target = map.getUnit(targetHex);
+        if(target == null || target.getOwnerId() == playerId)
+            return;
+        
+        //check if target is in attack range
+        
+        float attackDamage = (unit.type.strength / target.type.defence) * unit.getLevel() * unit.getHealthPercentage();
+        System.out.println(attackDamage);
+        target.modHealth(-attackDamage);
+        listeners.forEach(listener -> listener.onAttack(unitHex, targetHex, attackDamage));
+    }
+    
+    private boolean isHexReachable(Hex unitHex, Hex targetHex) {
+        Unit unit = map.getUnit(unitHex);
+        Unit target = map.getUnit(targetHex);
+        
+        if(unit == null) {
+            System.out.println("No unit found!");
+            return false;
+        }
+        
+        if(target != null) {
+            System.out.println("Hex occupied!");
+            return false;
+        }
+        
+        return pathfinder.findPath(unitHex, targetHex) != null;
+    }
+
+    private boolean isHexAttackable(Hex unitHex, Hex targetHex) {
+        return isHexReachable(unitHex, targetHex);
+    }
+
+    public void spawnUnit(int playerId, Hex position, UnitType type) {
+        if(playerId == currentPlayer) {
+            Unit u = new Unit(MathUtils.random(5), type);
+            //Unit u = new Unit(players[currentPlayer], type);
+            //players[currenvtPlayer].addUnit(u);
+            map.getCell(position).setLayer(LayerType.UNIT, u);
+        }
+    }
+
     public HexMap getMap() {
         return map;
     }
@@ -99,13 +140,8 @@ public class GameController {
         return players[id];
     }
     
-    public void spawnUnit(int playerId, Hex position, UnitType type) {
-        if(playerId == currentPlayer) {
-            Unit u = new Unit(new Player(MathUtils.random(5)), type);
-            //Unit u = new Unit(players[currentPlayer], type);
-            //players[currenvtPlayer].addUnit(u);
-            map.getCell(position).setLayer(LayerType.UNIT, u);
-        }
+    public Pathfinder getPathfinder() {
+        return pathfinder;
     }
     
     /**
@@ -114,6 +150,7 @@ public class GameController {
      */
     public interface GameListener {
         void onTurn(int playerId);
-        void onAttack(Hex attacker, Hex target);
+        void onMove(Hex unit, Hex target);
+        void onAttack(Hex attacker, Hex target, float damage);
     }
 }

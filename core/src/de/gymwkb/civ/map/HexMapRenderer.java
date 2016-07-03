@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 import de.gymwkb.civ.map.HexMap.Cell;
 import de.gymwkb.civ.map.HexMap.Cell.ILayer;
@@ -92,6 +93,10 @@ public class HexMapRenderer {
             }
         }
         
+        if(map.getPath() != null) {
+            drawPath(map.getPath());
+        }
+        
         batch.end();
         shapeRenderer.end();
     }
@@ -111,5 +116,14 @@ public class HexMapRenderer {
         TextureRegion texture = getCachedHexture(layer.getHexture());
         Rectangle bounds = layout.getTextureBounds(hex);
         batch.draw(texture, bounds.x, bounds.y, bounds.width, bounds.height);
+    }
+    
+    private void drawPath(Array<Hex> path) {
+        shapeRenderer.setColor(0, 0, 1, 1);
+        for(int i = 1; i < path.size; i++) {
+            Vector2 a = layout.hexToCartesian(path.get(i - 1));
+            Vector2 b = layout.hexToCartesian(path.get(i));
+            shapeRenderer.line(a, b);
+        }
     }
 }

@@ -2,18 +2,23 @@ package de.gymwkb.civ.map;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.OrderedMap;
+import com.badlogic.gdx.utils.Array;
 
 import de.gymwkb.civ.game.Unit;
 import de.gymwkb.civ.registry.Hexture;
+import de.gymwkb.civ.registry.Terrain;
 
 /**
  * The HexMap is responsible for storing all hex cells and their position.
  */
 public class HexMap {
     private final OrderedMap<Hex, Cell> cells;
+    private Array<Hex> path;
 
-    public static final Hex[] NEIGHBORS = new Hex[] {new Hex(1, -1, 0), new Hex(0, 1, -1), new Hex(-1, 0, 1),
-            new Hex(-1, 1, 0), new Hex(0, -1, 1), new Hex(1, 0, -1)};
+    public static final Hex[] NEIGHBORS = new Hex[] {
+            new Hex(-1, 0, 1), new Hex(0, -1, 1), new Hex(1, -1, 0),
+            new Hex(1, 0, -1), new Hex(0, 1, -1), new Hex(-1, 1, 0)
+    };
     public static final int LAYER_COUNT = LayerType.values().length;
 
     public HexMap() {
@@ -41,6 +46,13 @@ public class HexMap {
             return (Unit) l;
         } else return null;
     }
+    
+    public Terrain getTerrain(Hex hex) {
+        Cell.ILayer l = getCell(hex).getLayer(LayerType.TERRAIN);
+        if(l != null && l instanceof Terrain) {
+            return (Terrain) l;
+        } else return null;
+    }
 
     public boolean contains(Hex hex) {
         return cells.containsKey(hex);
@@ -56,6 +68,17 @@ public class HexMap {
 
     public int getSize() {
         return cells.size;
+    }
+    
+    /**
+     * @param path MUST contain at least two Hexes
+     */
+    public void setPath(Array<Hex> path) {
+        this.path = (path);
+    }
+    
+    public Array<Hex> getPath() {
+        return path;
     }
 
     /**
@@ -91,5 +114,9 @@ public class HexMap {
   
     public enum LayerType {
         TERRAIN, UNIT, FOREGROUND
+    }
+    
+    public enum PathType {
+        SECONDARY_SELECTION
     }
 }

@@ -7,6 +7,17 @@ public enum UnitType {
     LIGHT_CAVALRY("Leichte Kavallerie", Hexture.UNIT_BASE, 3, 100, 10, 10, 1, 2),
     HEAVY_CAVALRY("Schwere Kavallerie", Hexture.UNIT_BASE, 1, 100, 10, 10, 1, 2),
     SWORDSMAN("Schwetkämpfer", Hexture.UNIT_BASE, 1, 100, 10, 10, 1, 1);
+    
+    public final String name;
+    public final Hexture hexture;
+    public final int movementRange;
+    public final float maxHealth;
+    public final float strength;
+    public final float defence;
+    public final int attackRange;
+    public final int viewRange;
+    
+    public static final int COUNT = UnitType.values().length;
 
     private UnitType(String name, Hexture hexture, int movementRange, int maxHealth, int strength,
             int defence, int attackRange, int viewRange) {
@@ -19,13 +30,4 @@ public enum UnitType {
         this.attackRange = attackRange;
         this.viewRange = viewRange;
     }
-
-    public final String name;
-    public final Hexture hexture;
-    public final int movementRange;
-    public final float maxHealth;
-    public final float strength;
-    public final float defence;
-    public final int attackRange;
-    public final int viewRange;
 }

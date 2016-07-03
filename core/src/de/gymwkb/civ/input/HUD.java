@@ -27,6 +27,7 @@ public class HUD extends Stage implements PlayerListener {
     
     private Table hudContainer;
     private Label[] resourceLabels;
+    private Label infoLabel;
     
     private Window unitWindow;
     private Label[] unitPropertyLabels;
@@ -62,6 +63,9 @@ public class HUD extends Stage implements PlayerListener {
             resourceLabels[i] = new Label(r.name + ": " + amount, skin, "value");
             hudContainer.add(resourceLabels[i]).pad(10);
         }
+        
+        infoLabel = new Label("", skin, "value");
+        hudContainer.add(infoLabel).pad(10);
         
         unitWindow = new Window("Einheit", skin);
         unitWindow.setSize(350f, 250f);
@@ -122,6 +126,11 @@ public class HUD extends Stage implements PlayerListener {
             showUnitWindow(unit);
         else
             hideUnitWindow();
+    }
+    
+    @Override
+    public void showInfo(String info) {
+        infoLabel.setText(info);
     }
 
     private ChangeListener l(Consumer<ChangeEvent> listener) {
