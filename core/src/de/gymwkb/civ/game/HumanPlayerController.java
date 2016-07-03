@@ -45,29 +45,26 @@ public class HumanPlayerController extends PlayerController {
         // TODO Auto-generated method stub    
     }
 
+    @Override
+    public void onDeath(Hex deadUnit) {
+        // TODO Auto-generated method stub
+        
+    }
+
     public void onHexClicked(Hex hex, int button) {
         if(hex == null || !map.contains(hex))
             return;
         
         Unit u = map.getUnit(hex);
-        if(u != null) {
-            if(hex.equals(selectedHex)) {
-                selectUnit(null);
-            } else if(u.getOwnerId() == player.id){
-                selectUnit(hex);
-            } else if(selectedHex != null) {
-                actionHex = hex;
-                game.attack(player.id, selectedHex, hex);
-            }
+        if(u != null && u.getOwnerId() == player.id) {
+            selectUnit(hex);
+        } else if(Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) {
+            game.spawnUnit(player.id, hex, UnitType.values()[MathUtils.random(UnitType.COUNT - 1)]);
+        } else if(Gdx.input.isKeyPressed(Keys.CONTROL_RIGHT)) {
+            game.spawnUnit(player.id+1, hex, UnitType.values()[MathUtils.random(UnitType.COUNT - 1)]);
         } else {
-            if(Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) {
-                game.spawnUnit(player.id, hex, UnitType.values()[MathUtils.random(UnitType.COUNT - 1)]);
-            } else if(Gdx.input.isKeyPressed(Keys.CONTROL_RIGHT)) {
-                game.spawnUnit(player.id+1, hex, UnitType.values()[MathUtils.random(UnitType.COUNT - 1)]);
-            } else if(selectedHex != null) {
-                actionHex = hex;
-                game.move(player.id, selectedHex, hex);
-            }
+            action = checkAction(hex);
+            executeAction();
         }
     }
     
@@ -75,27 +72,64 @@ public class HumanPlayerController extends PlayerController {
         if(hex != null)
             listeners.forEach(l -> l.showInfo(hex.toString()));
         
-        if(actionHex != null) {
-            actionHex = null;
-            actionPath.clear();
-        }
-        
+        action = checkAction(hex);
+    }
+    
+    /**
+     * Checks which action can be performed targeting the given hex.
+     * In doing so it also checks attack- and movementRange.
+     * Also sets actionHex and actionPath if the the given hex is valid.
+     * @return A fitting action or NONE if no action is possible.
+     */
+    private UnitAction checkAction(Hex hex) {
         if(hex != null && map.contains(hex) &&
                 selectedHex != null && !hex.equals(selectedHex)) {
             actionHex = hex;
             boolean pathExists = game.getPathfinder().findPath(actionPath, selectedHex, actionHex);
             if(pathExists) {
-                action = map.getUnit(hex) == null ? UnitAction.MOVE : UnitAction.ATTACK;
-            } else {
-                action = UnitAction.NONE;
+                Unit unit = map.getUnit(selectedHex);
+                Unit target = map.getUnit(hex);
+                if(target != null) {
+                    if(target.getOwnerId() != player.id && (actionPath.size - 1) <= unit.type.attackRange) {
+                        return UnitAction.ATTACK;
+                    }
+                } else {
+                    if((actionPath.size - 1) <= unit.type.movementRange) {
+                        return UnitAction.MOVE;
+                    }
+                }
             }
+        } else {
+            actionHex = null;
         }
+        
+        return UnitAction.NONE;
     }
     
-    public void selectUnit(Hex hex) {
-        if(hex == null) {
+    /**
+     * Calls the method of the GameController, which corresponds to action.
+     * If action is NONE, nothing will happen.
+     */
+    private void executeAction() {
+        switch(action) {
+            case MOVE:
+                game.move(player.id, selectedHex, actionHex);
+                break;
+            case ATTACK:
+                game.attack(player.id, selectedHex, actionHex);
+            default:
+                break;
+        }
+    }
+
+    /**
+     * - deletes selection if hex equals selectedHex<br/>
+     * - does NOT check if there is an unit on the given hex
+     */
+    private void selectUnit(Hex hex) {
+        if(hex == null || hex.equals(selectedHex)) {
             selectedHex = null;
-            onHexHover(null);
+            action = checkAction(null);
             listeners.forEach(listener -> listener.onUnitSelected(null));
         } else {
             if(selectedHex != null) {
@@ -105,7 +139,7 @@ public class HumanPlayerController extends PlayerController {
             listeners.forEach(listener -> listener.onUnitSelected(map.getUnit(selectedHex)));
         }
     }
-
+    
     public Hex getSelectedHex() {
         return selectedHex;
     }

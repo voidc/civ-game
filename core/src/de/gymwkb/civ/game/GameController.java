@@ -77,8 +77,7 @@ public class GameController {
         
         //check if target is in movement range
         
-        map.getCell(unitHex).setLayer(LayerType.UNIT, null);
-        map.getCell(targetHex).setLayer(LayerType.UNIT, unit);
+        map.moveUnit(unitHex, targetHex);
         listeners.forEach(listener -> listener.onMove(unitHex, targetHex));
     }
     
@@ -96,31 +95,18 @@ public class GameController {
         
         //check if target is in attack range
         
-        float attackDamage = (unit.type.strength / target.type.defence) * unit.getLevel() * unit.getHealthPercentage();
-        System.out.println(attackDamage);
-        target.modHealth(-attackDamage);
+        float attackDamage = ((unit.type.strength * unit.type.strength) / target.type.defence) * unit.getLevel() * unit.getHealthPercentage();
+        dealDamage(targetHex, target, attackDamage);
         listeners.forEach(listener -> listener.onAttack(unitHex, targetHex, attackDamage));
     }
     
-    private boolean isHexReachable(Hex unitHex, Hex targetHex) {
-        Unit unit = map.getUnit(unitHex);
-        Unit target = map.getUnit(targetHex);
-        
-        if(unit == null) {
-            System.out.println("No unit found!");
-            return false;
+    private void dealDamage(Hex hex, Unit unit, float damage) {
+        unit.modHealth(-damage);
+        if(unit.getHealth() == 0) {
+            map.getCell(hex).setLayer(LayerType.UNIT, null);
+            //players[unit.getOwnerId()].removeUnit(unit);
+            listeners.forEach(listener -> listener.onDeath(hex));
         }
-        
-        if(target != null) {
-            System.out.println("Hex occupied!");
-            return false;
-        }
-        
-        return true; //pathfinder.findPath(unitHex, targetHex) != null;
-    }
-
-    private boolean isHexAttackable(Hex unitHex, Hex targetHex) {
-        return isHexReachable(unitHex, targetHex);
     }
 
     public void spawnUnit(int playerId, Hex position, UnitType type) {
@@ -154,5 +140,6 @@ public class GameController {
         void onTurn(int playerId);
         void onMove(Hex unit, Hex target);
         void onAttack(Hex attacker, Hex target, float damage);
+        void onDeath(Hex deadUnit);
     }
 }
