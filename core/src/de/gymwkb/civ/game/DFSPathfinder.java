@@ -17,11 +17,10 @@ public class DFSPathfinder implements Pathfinder {
     }
 
     @Override
-    public Array<Hex> findPath(Hex start, Hex destination) {
+    public boolean findPath(Array<Hex> path, Hex start, Hex destination) {
         visitedCells.clear();
-        Array<Hex> path = new Array<>();
-        boolean found = dfs(start, destination, path);
-        return found ? path : null;
+        path.clear();
+        return dfs(start, destination, path);
     }
     
     private boolean dfs(Hex hex, Hex destination, Array<Hex> path) {

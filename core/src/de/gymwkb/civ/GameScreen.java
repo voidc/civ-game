@@ -11,11 +11,11 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.gymwkb.civ.game.HumanPlayerController;
-import de.gymwkb.civ.input.CameraController;
-import de.gymwkb.civ.input.HUD;
+import de.gymwkb.civ.input.CameraInputProcessor;
 import de.gymwkb.civ.input.MapInputProcessor;
 import de.gymwkb.civ.map.HexMapLayout;
-import de.gymwkb.civ.map.HexMapRenderer;
+import de.gymwkb.civ.view.HUD;
+import de.gymwkb.civ.view.HexMapRenderer;
 
 public class GameScreen implements Screen {
     private OrthographicCamera camera;
@@ -39,12 +39,12 @@ public class GameScreen implements Screen {
         hextures = CivGame.instance.assets.get("hextures/pack.atlas");
         
         HexMapLayout layout = new HexMapLayout(HexMapLayout.POINTY, new Vector2(100f, 100f), new Vector2());
-        this.renderer = new HexMapRenderer(controller.getMap(), layout, CivGame.instance.batch);
+        this.renderer = new HexMapRenderer(controller, layout, CivGame.instance.batch);
         renderer.loadHextures(hextures);
         
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(hud);
-        inputMultiplexer.addProcessor(new CameraController(camera));
+        inputMultiplexer.addProcessor(new CameraInputProcessor(camera));
         inputMultiplexer.addProcessor(new MapInputProcessor(controller, layout, camera));
         Gdx.input.setInputProcessor(inputMultiplexer);
     }

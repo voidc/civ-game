@@ -116,7 +116,7 @@ public class GameController {
             return false;
         }
         
-        return pathfinder.findPath(unitHex, targetHex) != null;
+        return true; //pathfinder.findPath(unitHex, targetHex) != null;
     }
 
     private boolean isHexAttackable(Hex unitHex, Hex targetHex) {
@@ -125,9 +125,11 @@ public class GameController {
 
     public void spawnUnit(int playerId, Hex position, UnitType type) {
         if(playerId == currentPlayer) {
+            Unit u = new Unit(currentPlayer, type);
+            players[currentPlayer].addUnit(u);
+            map.getCell(position).setLayer(LayerType.UNIT, u);
+        } else {
             Unit u = new Unit(MathUtils.random(5), type);
-            //Unit u = new Unit(players[currentPlayer], type);
-            //players[currenvtPlayer].addUnit(u);
             map.getCell(position).setLayer(LayerType.UNIT, u);
         }
     }

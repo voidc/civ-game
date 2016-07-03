@@ -1,4 +1,4 @@
-package de.gymwkb.civ.input;
+package de.gymwkb.civ.view;
 
 import java.util.function.Consumer;
 

@@ -1,5 +1,6 @@
-package de.gymwkb.civ.map;
+package de.gymwkb.civ.view;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -11,11 +12,17 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
+import de.gymwkb.civ.game.HumanPlayerController;
+import de.gymwkb.civ.game.HumanPlayerController.UnitAction;
+import de.gymwkb.civ.map.Hex;
+import de.gymwkb.civ.map.HexMap;
+import de.gymwkb.civ.map.HexMapLayout;
 import de.gymwkb.civ.map.HexMap.Cell;
 import de.gymwkb.civ.map.HexMap.Cell.ILayer;
 import de.gymwkb.civ.registry.Hexture;
 
 public class HexMapRenderer {
+    private HumanPlayerController controller;
     private HexMap map;
     private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
@@ -24,9 +31,19 @@ public class HexMapRenderer {
     private AtlasRegion[] cachedHextures;
 
     private final Vector2[] vertexBuffer;
+    
+    private static final ILayer SELECTION_LAYER = Hexture.SELECTION_BASE.createLayer(new Color(0x00b2aeff));
+    private static final ILayer[] ACTION_LAYERS = new ILayer[UnitAction.COUNT];
+    
+    static {
+        for(int i = 0; i < UnitAction.COUNT; i++) {
+            ACTION_LAYERS[i] = Hexture.SELECTION_BASE.createLayer(UnitAction.values()[i].actionColor);
+        }
+    }
 
-    public HexMapRenderer(HexMap map, HexMapLayout layout, SpriteBatch batch) {
-        this.map = map;
+    public HexMapRenderer(HumanPlayerController controller, HexMapLayout layout, SpriteBatch batch) {
+        this.controller = controller;
+        this.map = controller.getMap();
         this.batch = batch;
         this.layout = layout;
         this.shapeRenderer = new ShapeRenderer();
@@ -93,8 +110,15 @@ public class HexMapRenderer {
             }
         }
         
-        if(map.getPath() != null) {
-            drawPath(map.getPath());
+        if(controller.getSelectedHex() != null) {
+            drawLayer(controller.getSelectedHex(), SELECTION_LAYER);
+        }
+        
+        if(controller.getActionHex() != null) {
+            drawLayer(controller.getActionHex(), ACTION_LAYERS[controller.getAction().ordinal()]);
+            if(controller.getActionPath() != null) {
+                drawPath(controller.getActionPath());
+            }
         }
         
         batch.end();
