@@ -25,6 +25,8 @@ public class AStarPathfinder implements Pathfinder{
         Queue<Hex>  openList = new Queue<Hex>();
         Queue<Hex> closedList= new Queue<Hex>();
         start.f = 0;
+        start.parent = null;
+        start.g = 0;
         openList.addFirst(start);
         while(!(openList.size == 0)){
             Hex q = getFMin(openList);
@@ -36,6 +38,7 @@ public class AStarPathfinder implements Pathfinder{
                     path.add(destination);
                     return true;
                 }
+                successor.parent = q;
                 successor.g = q.g + ManhattanDistance(successor, q);
                 successor.h = ManhattanDistance(destination, successor);
                 successor.f = successor.g + successor.h;
@@ -90,10 +93,11 @@ public class AStarPathfinder implements Pathfinder{
     }
     
     public void getRoute(Hex start, Hex destination, Array<Hex> Queue){
+        Queue.clear();
         Hex currentHex = destination;
         boolean finished = false;
-        do{
-            if(currentHex.equals(start)){
+        while(!finished && currentHex != null){
+            if(currentHex != null && currentHex.equals(start)){
                 Queue.add(start);
                 finished = true;
             }
@@ -101,6 +105,6 @@ public class AStarPathfinder implements Pathfinder{
                 Queue.add(currentHex.parent);
                 currentHex = currentHex.parent;
             }
-        }while(!finished);
+        }
     }
 }
