@@ -3,6 +3,8 @@ package de.gymwkb.civ.game;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 
+import de.gymwkb.civ.game.ai.DFSPathfinder;
+import de.gymwkb.civ.game.ai.Pathfinder;
 import de.gymwkb.civ.map.Hex;
 import de.gymwkb.civ.map.HexMap;
 import de.gymwkb.civ.map.HexagonGenerator;

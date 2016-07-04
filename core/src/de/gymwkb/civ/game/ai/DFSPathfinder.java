@@ -1,6 +1,7 @@
-package de.gymwkb.civ.game;
+package de.gymwkb.civ.game.ai;
 
 import com.badlogic.gdx.utils.Array;
+
 import de.gymwkb.civ.map.Hex;
 import de.gymwkb.civ.map.HexMap;
 import de.gymwkb.civ.registry.Terrain;

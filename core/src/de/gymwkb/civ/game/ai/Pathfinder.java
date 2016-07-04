@@ -1,4 +1,4 @@
-package de.gymwkb.civ.game;
+package de.gymwkb.civ.game.ai;
 
 import com.badlogic.gdx.utils.Array;
 

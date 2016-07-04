@@ -4,6 +4,10 @@ public class Hex {
     public final int q;
     public final int r;
     public final int s;
+    public float f;
+    public float g;
+    public float h;
+    public Hex parent = null;
 
     public Hex(int q, int r, int s) {
         this.q = q;
