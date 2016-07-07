@@ -69,8 +69,11 @@ public class HumanPlayerController extends PlayerController {
     }
     
     public void onHexHover(Hex hex) {
-        if(hex != null)
-            listeners.forEach(l -> l.showInfo(hex.toString()));
+        if(hex != null) {
+            String dist = selectedHex != null ? ", d: " + String.valueOf(selectedHex.mhDist(hex)) : "";
+            listeners.forEach(l -> l.showInfo(hex.toString() + dist));
+            
+        }
         
         action = checkAction(hex);
     }
@@ -85,19 +88,19 @@ public class HumanPlayerController extends PlayerController {
         if(hex != null && map.contains(hex) &&
                 selectedHex != null && !hex.equals(selectedHex)) {
             actionHex = hex;
-            boolean pathExists = game.getPathfinder().findPath(actionPath, selectedHex, actionHex);
-            if(pathExists) {
-                Unit unit = map.getUnit(selectedHex);
-                Unit target = map.getUnit(hex);
-                if(target != null) {
-                    if(target.getOwnerId() != player.id && (actionPath.size - 1) <= unit.type.attackRange) {
-                        return UnitAction.ATTACK;
-                    }
-                } else {
-                    if((actionPath.size - 1) <= unit.type.movementRange) {
-                        return UnitAction.MOVE;
-                    }
+            
+            int mhDist = selectedHex.mhDist(actionHex);
+            Unit target = map.getUnit(hex);
+            Unit unit = map.getUnit(selectedHex); //assert: not null
+            if(target != null) { //check attack action
+                if(target.getOwnerId() != player.id && mhDist <= unit.type.attackRange) {
+                    return UnitAction.ATTACK;
                 }
+            } else { //check move action
+                boolean pathExists = game.getPathfinder().findPath(actionPath, selectedHex,
+                        actionHex, unit.type.movementRange);
+                if(pathExists)
+                    return UnitAction.MOVE;
             }
         } else {
             actionHex = null;

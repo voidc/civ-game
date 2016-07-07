@@ -4,10 +4,6 @@ public class Hex {
     public final int q;
     public final int r;
     public final int s;
-    public float f;
-    public float g;
-    public float h;
-    public Hex parent = null;
 
     public Hex(int q, int r, int s) {
         this.q = q;
@@ -17,6 +13,10 @@ public class Hex {
 
     public Hex add(Hex other) {
         return new Hex(q + other.q, r + other.r, s + other.s);
+    }
+    
+    public int mhDist(Hex other) {
+        return (Math.abs(other.q - this.q) + Math.abs(other.r - this.r) + Math.abs(other.s - this.s)) / 2;
     }
 
     @Override

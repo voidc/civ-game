@@ -116,7 +116,7 @@ public class HexMapRenderer {
         
         if(controller.getActionHex() != null) {
             drawLayer(controller.getActionHex(), ACTION_LAYERS[controller.getAction().ordinal()]);
-            if(controller.getAction() != UnitAction.NONE) {
+            if(controller.getAction() == UnitAction.MOVE) {
                 drawPath(controller.getActionPath());
             }
         }

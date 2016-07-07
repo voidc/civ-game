@@ -18,41 +18,71 @@ public class DFSPathfinder implements Pathfinder {
     }
 
     @Override
-    public boolean findPath(Array<Hex> path, Hex start, Hex destination) {
+    public boolean findPath(Array<Hex> path, Hex start, Hex destination, int length) {
         visitedCells.clear();
         if(path != null) {
             path.clear();
-            return dfs(start, destination, path);
-        } else return dfs(start, destination);
+            return dfs(start, destination, path, length);
+        } else return dfs(start, destination, 0, length);
     }
     
-    private boolean dfs(Hex hex, Hex destination) {
+    private boolean dfs(Hex hex, Hex destination, int depth, int maxLength) {
         visitedCells.add(hex);
+        depth++;
+        
         if(hex.equals(destination))
             return true;
         
-        for(int i = 0; i < NEIGHBORS.length; i++) {
-            Hex neighbor = hex.add(NEIGHBORS[i]);
-            if(map.contains(neighbor) && canMoveTo(neighbor, destination) && !isVisited(neighbor)) {
-                if(dfs(neighbor, destination)) {
+        if(depth > maxLength) {
+            depth--;
+            return false;
+        }
+        
+        Array<Hex> neighbors = new Array<Hex>();
+        
+        for(int i = 0; i < NEIGHBORS.length; i++) {     
+            neighbors.add(hex.add(NEIGHBORS[i]));
+        }
+        
+        neighbors.sort((a, b) -> b.mhDist(destination) - a.mhDist(destination));
+        
+        while(neighbors.size > 0) {
+            Hex n = neighbors.pop();
+            if(map.contains(n) && canMoveTo(n, destination) && !isVisited(n)) {
+                if(dfs(n, destination, depth, maxLength)) {
                     return true;
                 }
             }
         }
         
+        depth--;
         return false;
     }
 
-    private boolean dfs(Hex hex, Hex destination, Array<Hex> path) {
+    private boolean dfs(Hex hex, Hex destination, Array<Hex> path, int maxLength) {
         visitedCells.add(hex);
         path.add(hex);
+        
         if(hex.equals(destination))
             return true;
         
-        for(int i = 0; i < NEIGHBORS.length; i++) {
-            Hex neighbor = hex.add(NEIGHBORS[i]);
-            if(map.contains(neighbor) && canMoveTo(neighbor, destination) && !isVisited(neighbor)) {
-                if(dfs(neighbor, destination, path)) {
+        if(path.size > maxLength) {
+            path.pop();
+            return false;
+        }
+        
+        Array<Hex> neighbors = new Array<Hex>();
+        
+        for(int i = 0; i < NEIGHBORS.length; i++) {     
+            neighbors.add(hex.add(NEIGHBORS[i]));
+        }
+        
+        neighbors.sort((a, b) -> b.mhDist(destination) - a.mhDist(destination));
+        
+        while(neighbors.size > 0) {
+            Hex n = neighbors.pop();
+            if(map.contains(n) && canMoveTo(n, destination) && !isVisited(n)) {
+                if(dfs(n, destination, path, maxLength)) {
                     return true;
                 }
             }
