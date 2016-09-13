@@ -17,6 +17,8 @@ public class HumanPlayerController extends PlayerController {
     private Hex actionHex;
     private Array<Hex> actionPath;
     private UnitAction action;
+
+    private static final String TAG = "HumanPlayerController";
     
     public HumanPlayerController(GameController game, int playerId) {
         super(game, playerId);
@@ -26,7 +28,7 @@ public class HumanPlayerController extends PlayerController {
     
     public void onTurn(int playerId) {
         if(playerId == player.id) {
-            System.out.println("Your turn!");
+            Gdx.app.log(TAG, "Your turn!");
         }
     }
 
@@ -38,7 +40,7 @@ public class HumanPlayerController extends PlayerController {
     }
 
     public void onAttack(Hex attacker, Hex target, float damage) {
-        // TODO Auto-generated method stub    
+        Gdx.app.log(TAG, "Attack damage: " + damage);
     }
 
     @Override
@@ -67,7 +69,7 @@ public class HumanPlayerController extends PlayerController {
             try {
                 executeAction();
             } catch (IllegalMoveException e) {
-                System.out.println(e.getMessage());
+                Gdx.app.log(TAG, e.getMessage());
             }
         }
     }
