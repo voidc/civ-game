@@ -1,7 +1,5 @@
-package de.gymwkb.civ.game.ai;
+package de.gymwkb.civ.game;
 
-import de.gymwkb.civ.game.GameController;
-import de.gymwkb.civ.game.PlayerController;
 import de.gymwkb.civ.map.Hex;
 
 public class DummyPlayerController extends PlayerController {
