@@ -3,10 +3,7 @@ package de.gymwkb.civ.view;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -38,6 +35,8 @@ public class HUD extends Stage implements PlayerListener {
      * 5: MoveRange
      * 6: AttackRange
      */
+
+    private Button nextTurnButton;
     
     public HUD(HumanPlayerController controller) {
         super(new ExtendViewport(GameScreen.GAME_WIDTH, GameScreen.GAME_HEIGHT));
@@ -48,7 +47,7 @@ public class HUD extends Stage implements PlayerListener {
     
     public void show() {
         hudContainer = new Table();
-        hudContainer.setDebug(true);
+        //hudContainer.setDebug(true);
         hudContainer.setFillParent(true);
         addActor(hudContainer);
         
@@ -64,6 +63,11 @@ public class HUD extends Stage implements PlayerListener {
         
         infoLabel = new Label("", skin, "value");
         hudContainer.add(infoLabel).pad(10);
+
+        hudContainer.row();
+        nextTurnButton = new TextButton("Next Turn", skin, "default");
+        nextTurnButton.addListener(l(event -> humanPlayer.nextTurn()));
+        hudContainer.add(nextTurnButton);
         
         unitWindow = new Window("Einheit", skin);
         unitWindow.setSize(350f, 250f);

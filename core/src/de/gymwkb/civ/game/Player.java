@@ -1,7 +1,6 @@
 package de.gymwkb.civ.game;
 
 import com.badlogic.gdx.utils.Array;
-
 import de.gymwkb.civ.registry.Resource;
 
 /**
@@ -28,6 +27,10 @@ public class Player {
     
     public void setResource(Resource resource, int amount) {
         resources[resource.ordinal()] = amount;
+    }
+
+    public Iterable<Unit> getUnits() {
+        return units;
     }
     
     @Override

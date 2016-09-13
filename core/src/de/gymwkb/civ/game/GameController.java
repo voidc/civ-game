@@ -1,6 +1,5 @@
 package de.gymwkb.civ.game;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import de.gymwkb.civ.game.ai.DFSPathfinder;
 import de.gymwkb.civ.game.ai.Pathfinder;
@@ -56,8 +55,13 @@ public class GameController {
         if (currentPlayer == 0) {
             turn++;
         }
-        
-        listeners.forEach(listener -> listener.onTurn(currentPlayer));
+
+        players[currentPlayer].getUnits().forEach(Unit::resetMoves);
+
+        System.out.println("Turn of player " + currentPlayer);
+        for (int i = 0; i < listeners.size; i++) {
+            listeners.get(i).onTurn(currentPlayer);
+        }
     }
 
     public void move(int playerId, Hex unitHex, Hex targetHex) throws IllegalMoveException {
@@ -114,12 +118,9 @@ public class GameController {
     }
 
     public void spawnUnit(int playerId, Hex position, UnitType type) {
-        if(playerId == currentPlayer) {
-            Unit u = new Unit(currentPlayer, type);
-            players[currentPlayer].addUnit(u);
-            map.getCell(position).setLayer(LayerType.UNIT, u);
-        } else {
-            Unit u = new Unit(MathUtils.random(5), type);
+        if (playerId < players.length /*playerId == currentPlayer*/) {
+            Unit u = new Unit(playerId, type);
+            players[playerId].addUnit(u);
             map.getCell(position).setLayer(LayerType.UNIT, u);
         }
     }

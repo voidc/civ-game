@@ -5,9 +5,9 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-
 import de.gymwkb.civ.game.GameController;
 import de.gymwkb.civ.game.HumanPlayerController;
+import de.gymwkb.civ.game.ai.DummyPlayerController;
 
 public class CivGame extends Game {
     public SpriteBatch batch;
@@ -38,6 +38,7 @@ public class CivGame extends Game {
     private void createGame() {
         GameController game = new GameController();
         HumanPlayerController humanPlayer = new HumanPlayerController(game, 0);
+        DummyPlayerController dummyPlayer = new DummyPlayerController(game, 1);
         setScreen(new GameScreen(humanPlayer));
     }
 

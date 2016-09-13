@@ -27,10 +27,7 @@ public class HumanPlayerController extends PlayerController {
     public void onTurn(int playerId) {
         if(playerId == player.id) {
             System.out.println("Your turn!");
-        } else {
-            System.out.println("Turn of player " + playerId);
         }
-        
     }
 
     public void onMove(Hex unit, Hex target) {
@@ -47,7 +44,11 @@ public class HumanPlayerController extends PlayerController {
     @Override
     public void onDeath(Hex deadUnit) {
         // TODO Auto-generated method stub
-        
+
+    }
+
+    public void nextTurn() {
+        game.finishTurn(player.id);
     }
 
     public void onHexClicked(Hex hex, int button) {
