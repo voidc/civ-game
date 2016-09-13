@@ -45,8 +45,6 @@ public class HumanPlayerController extends PlayerController {
 
     @Override
     public void onDeath(Hex deadUnit) {
-        // TODO Auto-generated method stub
-
     }
 
     public void nextTurn() {

@@ -81,27 +81,36 @@ public class GameController {
 
         boolean pathExists = pathfinder.findPath(pathBuffer, unitHex, targetHex, unit.getRemainingMoves());
         if (!pathExists) {
-            throw new IllegalMoveException("Cannot move to hex!");
+            throw new IllegalMoveException("Hex out of reach!");
         }
 
         unit.addMoves(pathBuffer.size - 1);
         map.moveUnit(unitHex, targetHex);
         listeners.forEach(listener -> listener.onMove(unitHex, targetHex));
     }
-    
-    public void attack(int playerId, Hex unitHex, Hex targetHex) {
-        if (currentPlayer != playerId)
-            return;
+
+    public void attack(int playerId, Hex unitHex, Hex targetHex) throws IllegalMoveException {
+        if (currentPlayer != playerId) {
+            throw new IllegalMoveException("Wrong turn!");
+        }
         
         Unit unit = map.getUnit(unitHex);
-        if(unit == null || unit.getOwnerId() != playerId || unit.type.strength == 0)
-            return;
+        if (unit == null || unit.getOwnerId() != playerId) {
+            throw new IllegalMoveException("No unit!");
+        }
+
+        if (unit.type.strength == 0) {
+            throw new IllegalMoveException("Unit cannot attack!");
+        }
         
         Unit target = map.getUnit(targetHex);
-        if(target == null || target.getOwnerId() == playerId)
-            return;
-        
-        //check if target is in attack range
+        if (target == null || target.getOwnerId() == playerId) {
+            throw new IllegalMoveException("No valid target!");
+        }
+
+        if (unitHex.mhDist(targetHex) > unit.type.attackRange) {
+            throw new IllegalMoveException("Target out of reach!");
+        }
         
         float attackDamage = ((unit.type.strength * unit.type.strength) / target.type.defence) * unit.getLevel() * unit.getHealthPercentage();
         dealDamage(targetHex, target, attackDamage);
