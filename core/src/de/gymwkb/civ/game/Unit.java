@@ -2,7 +2,6 @@ package de.gymwkb.civ.game;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
-
 import de.gymwkb.civ.map.HexMap;
 import de.gymwkb.civ.registry.Hexture;
 import de.gymwkb.civ.registry.UnitType;
@@ -12,6 +11,8 @@ public class Unit implements HexMap.Cell.ILayer {
     private int ownerId;
     private float health;
     private float ep;
+    private int moves;
+    private boolean canMove;
     
     public static final float EP_PER_LEVEL = 100f;
     
@@ -29,6 +30,8 @@ public class Unit implements HexMap.Cell.ILayer {
         this.type = type;
         this.health = type.maxHealth;
         this.ep = 0f;
+        this.moves = 0;
+        this.canMove = true;
     }
 
     @Override
@@ -66,7 +69,23 @@ public class Unit implements HexMap.Cell.ILayer {
     }
     
     public void addEp(float amount) {
-        ep += Math.abs(amount);
+        this.ep += Math.abs(amount);
     }
-    
+
+    public int getRemainingMoves() {
+        return canMove ? type.movementRange - moves : 0;
+    }
+
+    public void resetMoves() {
+        moves = 0;
+        canMove = true;
+    }
+
+    public void addMoves(int moves) {
+        this.moves += Math.abs(moves);
+    }
+
+    public void setCanMove(boolean canMove) {
+        this.canMove = canMove;
+    }
 }

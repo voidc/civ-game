@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
-
 import de.gymwkb.civ.map.Hex;
 import de.gymwkb.civ.registry.UnitType;
 
@@ -64,7 +63,11 @@ public class HumanPlayerController extends PlayerController {
             game.spawnUnit(player.id+1, hex, UnitType.values()[MathUtils.random(UnitType.COUNT - 1)]);
         } else {
             action = checkAction(hex);
-            executeAction();
+            try {
+                executeAction();
+            } catch (IllegalMoveException e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
     
@@ -97,8 +100,8 @@ public class HumanPlayerController extends PlayerController {
                     return UnitAction.ATTACK;
                 }
             } else { //check move action
-                boolean pathExists = game.getPathfinder().findPath(actionPath, selectedHex,
-                        actionHex, unit.type.movementRange);
+                boolean pathExists = game.getPathfinder().findPath(actionPath, selectedHex, actionHex,
+                        unit.getRemainingMoves());
                 if(pathExists)
                     return UnitAction.MOVE;
             }
@@ -113,7 +116,7 @@ public class HumanPlayerController extends PlayerController {
      * Calls the method of the GameController, which corresponds to action.
      * If action is NONE, nothing will happen.
      */
-    private void executeAction() {
+    private void executeAction() throws IllegalMoveException {
         switch(action) {
             case MOVE:
                 game.move(player.id, selectedHex, actionHex);

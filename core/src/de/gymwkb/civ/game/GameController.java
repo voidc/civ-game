@@ -2,13 +2,12 @@ package de.gymwkb.civ.game;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
-
 import de.gymwkb.civ.game.ai.DFSPathfinder;
 import de.gymwkb.civ.game.ai.Pathfinder;
 import de.gymwkb.civ.map.Hex;
 import de.gymwkb.civ.map.HexMap;
-import de.gymwkb.civ.map.HexagonGenerator;
 import de.gymwkb.civ.map.HexMap.LayerType;
+import de.gymwkb.civ.map.HexagonGenerator;
 import de.gymwkb.civ.registry.UnitType;
 
 /**
@@ -23,6 +22,7 @@ public class GameController {
     private Player[] players;
     private int currentPlayer;
     private int turn;
+    private Array<Hex> pathBuffer;
     
     public static final int PLAYER_COUNT = 2;
     
@@ -37,7 +37,8 @@ public class GameController {
         
         pathfinder = new DFSPathfinder(map);
         listeners = new Array<>();
-        
+
+        pathBuffer = new Array<>();
         turn = 0;
     }
     
@@ -59,26 +60,27 @@ public class GameController {
         listeners.forEach(listener -> listener.onTurn(currentPlayer));
     }
 
-    public void move(int playerId, Hex unitHex, Hex targetHex) {
+    public void move(int playerId, Hex unitHex, Hex targetHex) throws IllegalMoveException {
         if (currentPlayer != playerId) {
-            System.out.println("Wrong turn!");
-            return;
+            throw new IllegalMoveException("Wrong turn!");
         }
         
         Unit unit = map.getUnit(unitHex);
         if(unit == null || unit.getOwnerId() != playerId) {
-            System.out.println("No unit!");
-            return;
+            throw new IllegalMoveException("No unit!");
         }
         
         Unit target = map.getUnit(targetHex);
         if(target != null) {
-            System.out.println("Hex occupied!");
-            return;
+            throw new IllegalMoveException("Hex occupied!");
         }
-        
-        //check if target is in movement range
-        
+
+        boolean pathExists = pathfinder.findPath(pathBuffer, unitHex, targetHex, unit.getRemainingMoves());
+        if (!pathExists) {
+            throw new IllegalMoveException("Cannot move to hex!");
+        }
+
+        unit.addMoves(pathBuffer.size - 1);
         map.moveUnit(unitHex, targetHex);
         listeners.forEach(listener -> listener.onMove(unitHex, targetHex));
     }

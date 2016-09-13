@@ -1,11 +1,8 @@
 package de.gymwkb.civ.view;
 
-import java.util.function.Consumer;
-
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -13,13 +10,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-
 import de.gymwkb.civ.CivGame;
 import de.gymwkb.civ.GameScreen;
 import de.gymwkb.civ.game.HumanPlayerController;
 import de.gymwkb.civ.game.HumanPlayerController.PlayerListener;
 import de.gymwkb.civ.game.Unit;
 import de.gymwkb.civ.registry.Resource;
+
+import java.util.function.Consumer;
 
 public class HUD extends Stage implements PlayerListener {
     private Skin skin;
@@ -106,7 +104,7 @@ public class HUD extends Stage implements PlayerListener {
         unitPropertyLabels[2].setText("STR " + unit.type.strength);
         unitPropertyLabels[3].setText("DEF " + unit.type.defence);
         unitPropertyLabels[4].setText("VR " + unit.type.viewRange);
-        unitPropertyLabels[5].setText("MR " + unit.type.movementRange);
+        unitPropertyLabels[5].setText("MR " + unit.getRemainingMoves());
         unitPropertyLabels[6].setText("AR " + unit.type.attackRange);
         unitWindow.setVisible(true);
     }
